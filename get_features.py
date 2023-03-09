@@ -5,7 +5,7 @@ import statistics
 
 # surface features
 def get_token(doc):
-    """Counts token in a doc without punctuation."""
+    """Get token in a doc without punctuation."""
     return [tok.text for tok in doc if not tok.is_punct]
 
 
@@ -19,6 +19,15 @@ def count_syllables(doc):
     """
     dictionary = pyphen.Pyphen(lang="de_DE")
     return sum([len(dictionary.inserted(token.text).split("-")) for token in doc])
+
+
+def get_text_length_in_token(doc):
+    """
+    Computes the text lenght in token (words).
+    :param doc: spacy.tokens.doc.Doc
+    :return: int
+    """
+    return len(get_token(doc))
 
 
 def get_average_sentence_length_in_token(doc):
@@ -96,25 +105,50 @@ def get_average_heights(doc):
     :return: float
     "Das ist eine tolle Banane. " == tree_height = 3
     """
-    print(type(doc))
     roots = [sent.root for sent in doc.sents]
     return statistics.mean([tree_height(root) for root in roots])
 
 
+# Cohesion features
+def get_average_number_of_pronouns_per_sentence(doc):
+    """
+    Computes average number of pronouns per sentence.
+    :param doc: spacy.tokens.doc.Doc
+    :return: float
+    """
+    return sum([1 for token in doc if token.pos_ == "PRON"]) / len(list(doc.sents))
+
+
+def get_average_number_of_definite_articles_per_sentence(doc):
+    """
+    Computes average number of definite articles for the sentences in doc, based on
+    the assumption that in german the definite articles start with d|D to exclude
+    the indefinite articles as they are also tagged with "ART" in spacy.
+    :param doc: spacy.tokens.doc.Doc
+    :return: float
+    """
+    def_articles_count = sum([1 for token in doc if token.tag_ == "ART" and token.text.startswith(("d", "D"))])
+    return def_articles_count / len(list(doc.sents))
+
+
 def main():
     nlp = spacy.load("de_core_news_sm")
-    text = "Das ist eine tolle Banane. " \
-        "Sie existiert, um gegessen zu werden. " \
-        "Je toller die Banane ist, desto mehr möchte ich sie essen. " \
+    text = "Das ist meine tolle Banane. " \
+           "Die Banane ist reif. " \
+           "Sie existiert, um gegessen zu werden. " \
+        "Je toller eine Banane ist, desto mehr möchte ich sie essen. " \
         "Sie kann gegessen werden, weil sie essbar ist. " \
         "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
     doc = nlp(text)
     #print(get_average_sentence_length_in_token(doc))
     #print(get_average_characters_per_word(doc))
     #print(get_average_syllables_per_word(doc))
+    #print(get_text_length_in_token(doc))
     #print(get_average_number_of_noun_phrases_per_sentence(doc))
-    print(get_average_heights(doc))
-    print(get_average_number_of_subordinate_clauses_per_sentence(doc))
+    #print(get_average_heights(doc))
+    #print(get_average_number_of_subordinate_clauses_per_sentence(doc))
+    print(get_average_number_of_pronouns_per_sentence(doc))
+    print(get_average_number_of_definite_articles_per_sentence(doc))
 
 
 if __name__ == "__main__":
