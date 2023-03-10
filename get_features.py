@@ -131,6 +131,20 @@ def get_average_number_of_definite_articles_per_sentence(doc):
     return def_articles_count / len(list(doc.sents))
 
 
+def calculate_all_features(doc):
+    return [
+        get_average_sentence_length_in_token(doc),
+        get_average_characters_per_word(doc),
+        get_average_syllables_per_word(doc),
+        get_text_length_in_token(doc),
+        get_average_number_of_noun_phrases_per_sentence(doc),
+        get_average_heights(doc),
+        get_average_number_of_subordinate_clauses_per_sentence(doc),
+        get_average_number_of_pronouns_per_sentence(doc),
+        get_average_number_of_definite_articles_per_sentence(doc)
+    ]
+
+
 def main():
     nlp = spacy.load("de_core_news_sm")
     text = "Das ist meine tolle Banane. " \
@@ -140,15 +154,8 @@ def main():
         "Sie kann gegessen werden, weil sie essbar ist. " \
         "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
     doc = nlp(text)
-    #print(get_average_sentence_length_in_token(doc))
-    #print(get_average_characters_per_word(doc))
-    #print(get_average_syllables_per_word(doc))
-    #print(get_text_length_in_token(doc))
-    #print(get_average_number_of_noun_phrases_per_sentence(doc))
-    #print(get_average_heights(doc))
-    #print(get_average_number_of_subordinate_clauses_per_sentence(doc))
-    print(get_average_number_of_pronouns_per_sentence(doc))
-    print(get_average_number_of_definite_articles_per_sentence(doc))
+    vec = calculate_all_features(doc)
+    print(vec)
 
 
 if __name__ == "__main__":
