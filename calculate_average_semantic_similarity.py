@@ -30,9 +30,14 @@ def get_all_lemmatized_nouns(doc):
     return [tok.lemma_ for tok in doc if tok.pos_ == "NOUN"]
 
 
-def create_cartesian_product(list_of_lemmas):
-    cartesian_product = list(itertools.product(list_of_lemmas, list_of_lemmas))
-    return [' '.join(x) for x in cartesian_product]
+def create_combinations_of_elements(list_of_lemmas):
+    """Create all compinations of elements in sorted order, no repeated elements.
+    list_of_lemmas = ['G', 'G', 'A', 'F']
+    combinations = [('G', 'G'), ('G', 'A'), ('G', 'F'), ('G', 'A'), ('G', 'F'), ('A', 'F')]
+    :param list_of_lemmas: list of strings
+    :return: list of strings"""
+    combinations = list(itertools.combinations(list_of_lemmas, 2))
+    return [' '.join(x) for x in combinations]
 
 
 def calculate_average_semantic_similarity(list_of_strings, nlp):
@@ -64,16 +69,21 @@ def main():
            "Je toller eine Politikerin ist, desto mehr möchte sie essen. " \
            "Im Urlaub ist es schön. " \
            "Manchmal gähnt der Fernseher. "
+
     doc = nlp(text)
     doc2 = nlp(text2)
 
-    all_nouns = get_all_lemmatized_nouns(doc)
-    cart_prod = set(create_cartesian_product(all_nouns))
-    print("average_semantic_similarity for DOC1:", calculate_average_semantic_similarity(cart_prod, nlp))
+    all_nouns1 = get_all_lemmatized_nouns(doc)
+    combinations1 = create_combinations_of_elements(all_nouns1)
+    print("average_semantic_similarity for DOC1:", calculate_average_semantic_similarity(combinations1, nlp))
 
-    all_nouns = get_all_lemmatized_nouns(doc2)
-    cart_prod = set(create_cartesian_product(all_nouns))
-    print("average_semantic_similarity for DOC2", calculate_average_semantic_similarity(cart_prod, nlp))
+    all_nouns2 = get_all_lemmatized_nouns(doc2)
+    combinations2 = set(create_combinations_of_elements(all_nouns2))
+    print("average_semantic_similarity for DOC2", calculate_average_semantic_similarity(combinations2, nlp))
+
+    # output:
+    # average_semantic_similarity for DOC1: 0.7228063295284907
+    # average_semantic_similarity for DOC2 0.1710091012219588
 
 
 if __name__ == "__main__":
