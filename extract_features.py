@@ -2,23 +2,54 @@ import json
 import csv
 import spacy
 
-from get_features import calculate_all_features
+from surface_features import get_average_sentence_length_in_token, get_average_characters_per_word, \
+    get_average_syllables_per_word, get_text_length_in_token
+
+from syntactic_features import get_average_number_of_noun_phrases_per_sentence, get_average_heights, \
+    get_average_number_of_subordinate_clauses_per_sentence
+
+from discourse_features import get_average_number_of_pronouns_per_sentence, \
+    get_average_number_of_definite_articles_per_sentence
+
+from semantic_similarity_features import get_average_semantic_similarity_of_all_nouns, \
+    get_average_semantic_similarity_of_all_verbs, get_average_semantic_similarity_of_all_adjectives
 
 
 # create a feature to index dict to keep track of order of elements
 features = ["average_sentence_length_in_token",
-        "average_characters_per_word",
-        "average_syllables_per_word",
-        "text_length_in_token",
-        "average_number_of_noun_phrases_per_sentence",
-        "average_heights",
-        "average_number_of_subordinate_clauses_per_sentence",
-        "average_number_of_pronouns_per_sentence",
-        "average_number_of_definite_articles_per_sentence"]
+            "average_characters_per_word",
+            "average_syllables_per_word",
+            "text_length_in_token",
+            "average_number_of_noun_phrases_per_sentence",
+            "average_heights",
+            "average_number_of_subordinate_clauses_per_sentence",
+            "average_number_of_pronouns_per_sentence",
+            "average_number_of_definite_articles_per_sentence",
+            "average_semantic_similarity_of_all_nouns",
+            "average_semantic_similarity_of_all_verbs",
+            "average_semantic_similarity_of_all_adjectives"]
+
 feature_to_index = dict()
 for i, value in enumerate(features):
     feature = "".join(value)
     feature_to_index[feature] = i
+
+
+def calculate_all_features(doc, nlp):
+    return [
+        get_average_sentence_length_in_token(doc),
+        get_average_characters_per_word(doc),
+        get_average_syllables_per_word(doc),
+        get_text_length_in_token(doc),
+        get_average_number_of_noun_phrases_per_sentence(doc),
+        get_average_heights(doc),
+        get_average_number_of_subordinate_clauses_per_sentence(doc),
+        get_average_number_of_pronouns_per_sentence(doc),
+        get_average_number_of_definite_articles_per_sentence(doc),
+        get_average_semantic_similarity_of_all_nouns(doc, nlp),
+        get_average_semantic_similarity_of_all_verbs(doc, nlp),
+        get_average_semantic_similarity_of_all_adjectives(doc, nlp)
+    ]
 
 
 def get_json_data_from_txt_file(file_path):
@@ -31,7 +62,7 @@ def get_features_for_all_docs(list_of_dicts, nlp):
     results = dict()
     for elem in list_of_dicts:
         doc = nlp(elem["text"])
-        vec = calculate_all_features(doc)
+        vec = calculate_all_features(doc, nlp)
         results[elem["id"]] = vec
     return results
 
@@ -83,5 +114,19 @@ def main():
             writer.writerow(line)
 
 
+def demo():
+    nlp = spacy.load("de_core_news_sm")
+    text = "Das ist meine tolle Banane. " \
+           "Die Banane ist reif. " \
+           "Sie existiert, um gegessen zu werden. " \
+        "Je toller eine Banane ist, desto mehr möchte ich sie essen. " \
+        "Sie kann gegessen werden, weil sie essbar ist. " \
+        "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
+    doc = nlp(text)
+    vec = calculate_all_features(doc)
+    print(vec)
+
+
 if __name__ == "__main__":
-    main()
+    #main()
+    demo()
