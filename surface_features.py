@@ -1,8 +1,8 @@
+# surface features
 import spacy
 import pyphen
-import statistics
 
-# surface features
+
 def get_token(doc):
     """Get token in a doc without punctuation."""
     return [tok.text for tok in doc if not tok.is_punct]
@@ -66,9 +66,21 @@ def main():
         "Je toller eine Banane ist, desto mehr möchte ich sie essen. " \
         "Sie kann gegessen werden, weil sie essbar ist. " \
         "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
+
     doc = nlp(text)
-    vec = calculate_all_features(doc)
-    print(vec)
+
+    print("### Surface Features ###")
+    print("text length in token:", get_text_length_in_token(doc))
+    print("sentence length in token:", get_average_sentence_length_in_token(doc))
+    print("average number of characters per word:", get_average_characters_per_word(doc))
+    print("average number of syllables per word:", get_average_syllables_per_word(doc))
+
+    # output:
+    # ### Surface Features ###
+    # text length in token: 45
+    # sentence length in token: 7.5
+    # average number of characters per word: 4.733333333333333
+    # average number of syllables per word: 1.9111111111111112
 
 
 if __name__ == "__main__":
