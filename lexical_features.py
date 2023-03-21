@@ -1,15 +1,13 @@
-# type-token-ratio and lexical complexity score
+# type-token-ratio and lexical-complexity-score
 import spacy
 import numpy as np
 import json
 
 
 def calculate_ttr(doc):
-    """
-    Computes the type-token-ratio with lemmatized words.
+    """Computes the type-token-ratio with lemmatized words.
     :param doc: spacy.tokens.doc.Doc
-    :return: float
-    """
+    :return: float """
     lemmatized_words = [tok.lemma_ for tok in doc if not tok.is_punct and not tok.is_space]
     print("lemmatized_words", lemmatized_words)
     unique_words = set(lemmatized_words)
@@ -18,17 +16,15 @@ def calculate_ttr(doc):
 
 
 def calculate_lexical_complexity_score(doc, tokens_freq):
-    """
-    Computes the lexical complexity with lemmatized lowered words as
+    """Computes the lexical complexity with lemmatized lowered words as
     proposed from Alva-Manchego et al. (2019):
         ### "The lexical complexity score of a simplified sentence is
         computed by taking the log-ranks of each word in the frequency
         table. The ranks are then aggregated by taking their
         third quartile." ###
     :param doc: spacy.tokens.doc.Doc
-    :param tokens_freq: frequency table (dict with token as keys and freqs as values)
-    :return: float
-    """
+    :param tokens_freq: frequency table (dict: token as keys and freqs as values)
+    :return: float """
     # tokenize and lemmatize the doc ignoring punctuation
     tokens = [tok.lemma_.lower() for tok in doc if not tok.is_punct]
     print(tokens)
@@ -56,8 +52,7 @@ def calculate_lexical_complexity_score(doc, tokens_freq):
 
 
 def get_token_frequencies_from_corpus(corpus_path):
-    """
-    Returns the frequencies table , which is a dict with token as keys
+    """ Returns the frequencies table , which is a dict with token as keys
     and frequencies as values for the DeDrKo corpus.
         ### the corpus looks like this:
             ist	sein	VAFIN	64833211
@@ -65,8 +60,7 @@ def get_token_frequencies_from_corpus(corpus_path):
             für	für	APPR	56990511
             des	die	ART	56555049.7224575
     :param corpus_path: str
-    :return: dict
-    """
+    :return: dict """
     frequency_table = dict()
     with open(corpus_path, "r", encoding="utf-8") as file:
         for line in file:
