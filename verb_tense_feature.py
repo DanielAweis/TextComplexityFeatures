@@ -23,23 +23,33 @@ def get_verb_forms(doc):
     return doc_verb_forms
 
 
-def main():
+def get_average_number_of_verbs_in_sentence(doc):
+    """Assuming that more complex tenses with more than two verbs (finite and
+    infinite) are difficult to acquire, the average number of all verbs per
+    sentence is calculated here.
+    :param doc: spacy.tokens.doc.Doc
+    :return: float """
+    verb_forms = get_verb_forms(doc)
+    # make a flat list
+    # TODO: Do i need the information per sentence?
+    num_of_verbs = len([verb for sent in verb_forms for verb in sent])
+    return num_of_verbs / len(list(doc.sents))
+
+
+def demo():
     nlp = spacy.load("de_core_news_sm")
     text = "Die Bananen sind reif. " \
            "Die Gurke war reif." \
            "Der Mann hat Gurkensalat gemacht." \
            "Der Bananensalat wird morgen gemacht werden."
     doc = nlp(text)
-
-    for token in doc:
-        # print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
-        # token.shape_, token.is_alpha, token.is_stop)
-        print(token.tag_, token.text, list(token.morph), token.lemma_)
-
     print(get_verb_forms(doc))
     # [['Pres'], ['Past'], ['Pres', 'Part'], ['Pres', 'Part', 'Inf']]
 
+    print(get_average_number_of_verbs_in_sentence(doc))
+    # 1.75
+
 
 if __name__ == "__main__":
-    main()
+    demo()
 
