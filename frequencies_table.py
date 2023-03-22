@@ -1,6 +1,7 @@
-# Create a file with token frequencies
-# based on this DeReWo corpus
-# from https://www.ids-mannheim.de/digspra/kl/projekte/methoden/derewo/
+# This script generates a json file (token_freq_table.json) with token frequencies
+# based on this DeReWo corpus:
+# https://www.ids-mannheim.de/digspra/kl/projekte/methoden/derewo/
+# And provides a function to read in this list for further work.
 import json
 
 
@@ -40,7 +41,7 @@ def create_file_with_token_frequencies():
     :param json_file_path: (str) """
     corpus_path = "data/DeReWo/DeReKo-2014-II-MainArchive-STT.100000.freq"
     data = get_token_frequencies_from_corpus(corpus_path)
-    with open('data/token_freq_table.json', 'w') as f:
+    with open("token_freq_table.json", "w") as f:
         json.dump(data, f)
 
 
