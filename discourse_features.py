@@ -1,5 +1,7 @@
 import spacy
 
+from discourse_markers import get_discourse_markers_from_json_file
+
 
 # Cohesion features
 def get_average_number_of_pronouns_per_sentence(doc):
@@ -23,16 +25,27 @@ def get_average_number_of_definite_articles_per_sentence(doc):
     return def_articles_count / len(list(doc.sents))
 
 
-def main():
+def demo():
     nlp = spacy.load("de_core_news_sm")
     text = "Das ist meine tolle Banane. " \
            "Die Banane ist reif. " \
-           "Sie existiert, um gegessen zu werden. " \
+           "Sie existiert, um gegessen zu werden, abgesehen davon will ich sie nicht. " \
         "Je toller eine Banane ist, desto mehr möchte ich sie essen. " \
         "Sie kann gegessen werden, weil sie essbar ist. " \
         "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
     doc = nlp(text)
+    for sent in doc.sents:
+        print(sent)
+
+    discourse_markers = get_discourse_markers_from_json_file("discourse_markers.json")
+    print(discourse_markers)
+
+    #for token in doc:
+        # print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
+        # token.shape_, token.is_alpha, token.is_stop)
+        #print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
+              #token.shape_, token.is_alpha, token.is_stop, list(token.morph))
 
 
 if __name__ == "__main__":
-    main()
+    demo()
