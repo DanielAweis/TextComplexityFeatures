@@ -2,29 +2,79 @@ import json
 import csv
 import spacy
 
-from surface_features import get_average_sentence_length_in_token, get_average_characters_per_word, \
-    get_average_syllables_per_word, get_text_length_in_token
+from surface_features import \
+    get_average_sentence_length_in_token, \
+    get_average_characters_per_word, \
+    get_average_syllables_per_word, \
+    get_text_length_in_token
 
-from syntactic_features import get_average_number_of_noun_phrases_per_sentence, get_average_heights, \
-    get_average_number_of_subordinate_clauses_per_sentence
+from syntactic_features import \
+    get_average_number_of_noun_phrases_per_sentence, \
+    get_average_heights, \
+    get_average_number_of_subordinate_clauses_per_sentence, \
+    get_average_count_of_sentences_with_verb_as_root, \
+    get_average_count_of_sentences_with_nouns_as_root
 
-from discourse_features import get_average_number_of_pronouns_per_sentence, \
+from proportion_of_POS_tags_features import \
+    get_POS_tag_proportion_for_verbs, \
+    get_POS_tag_proportion_for_aux_verbs, \
+    get_POS_tag_proportion_for_nouns, \
+    get_POS_tag_proportion_for_adjectives, \
+    get_POS_tag_proportion_for_punctuations, \
+    get_POS_tag_proportion_for_determiners, \
+    get_POS_tag_proportion_for_pronouns, \
+    get_POS_tag_proportion_for_conjunctions, \
+    get_POS_tag_proportion_for_numerales, \
+    get_POS_tag_proportion_for_adpositions
+
+from lexical_features import calculate_ttr, \
+    calculate_lexical_complexity_score
+
+from verb_tense_feature import get_average_number_of_verbs_in_sentence
+
+from discourse_features import \
+    get_average_number_of_pronouns_per_sentence, \
     get_average_number_of_definite_articles_per_sentence
 
-from semantic_similarity_features import get_average_semantic_similarity_of_all_nouns, \
-    get_average_semantic_similarity_of_all_verbs, get_average_semantic_similarity_of_all_adjectives
+from semantic_similarity_features import \
+    get_average_semantic_similarity_of_all_nouns, \
+    get_average_semantic_similarity_of_all_verbs, \
+    get_average_semantic_similarity_of_all_adjectives
 
 
 # create a feature to index dict to keep track of order of elements
-features = ["average_sentence_length_in_token",
+features = [
+            # surface features
+            "average_sentence_length_in_token",
             "average_characters_per_word",
             "average_syllables_per_word",
             "text_length_in_token",
+            # syntactic features
             "average_number_of_noun_phrases_per_sentence",
             "average_heights",
             "average_number_of_subordinate_clauses_per_sentence",
+            "average_count_of_sentences_with_verb_as_root",
+            "average_count_of_sentences_with_nouns_as_root",
+            # POS tag features
+            "POS_tag_proportion_for_verbs", 
+            "POS_tag_proportion_for_aux_verbs", 
+            "POS_tag_proportion_for_nouns", 
+            "POS_tag_proportion_for_adjectives", 
+            "POS_tag_proportion_for_punctuations", 
+            "POS_tag_proportion_for_determiners", 
+            "POS_tag_proportion_for_pronouns", 
+            "POS_tag_proportion_for_conjunctions", 
+            "POS_tag_proportion_for_numerales", 
+            "POS_tag_proportion_for_adpositions",
+            # lexical features
+            "ttr",
+            "lexical_complexity_score",
+            # verb tense
+            "average_number_of_verbs_in_sentence",
+            # discourse features
             "average_number_of_pronouns_per_sentence",
             "average_number_of_definite_articles_per_sentence",
+            # semantic_similarity_features
             "average_semantic_similarity_of_all_nouns",
             "average_semantic_similarity_of_all_verbs",
             "average_semantic_similarity_of_all_adjectives"]
@@ -37,15 +87,37 @@ for i, value in enumerate(features):
 
 def calculate_all_features(doc, nlp):
     return [
+        # surface features
         get_average_sentence_length_in_token(doc),
         get_average_characters_per_word(doc),
         get_average_syllables_per_word(doc),
         get_text_length_in_token(doc),
+        # syntactic features
         get_average_number_of_noun_phrases_per_sentence(doc),
         get_average_heights(doc),
         get_average_number_of_subordinate_clauses_per_sentence(doc),
+        get_average_count_of_sentences_with_verb_as_root(doc),
+        get_average_count_of_sentences_with_nouns_as_root(doc),
+        # POS tag features
+        get_POS_tag_proportion_for_verbs(doc),
+        get_POS_tag_proportion_for_aux_verbs(doc),
+        get_POS_tag_proportion_for_nouns(doc),
+        get_POS_tag_proportion_for_adjectives(doc),
+        get_POS_tag_proportion_for_punctuations(doc),
+        get_POS_tag_proportion_for_determiners(doc),
+        get_POS_tag_proportion_for_pronouns(doc),
+        get_POS_tag_proportion_for_conjunctions(doc),
+        get_POS_tag_proportion_for_numerales(doc),
+        get_POS_tag_proportion_for_adpositions,
+        # lexical features
+        calculate_ttr(doc),
+        calculate_lexical_complexity_score(doc),
+        # verb tense
+        get_average_number_of_verbs_in_sentence(doc),
+        # discourse features
         get_average_number_of_pronouns_per_sentence(doc),
         get_average_number_of_definite_articles_per_sentence(doc),
+        # semantic_similarity_features
         get_average_semantic_similarity_of_all_nouns(doc, nlp),
         get_average_semantic_similarity_of_all_verbs(doc, nlp),
         get_average_semantic_similarity_of_all_adjectives(doc, nlp)
