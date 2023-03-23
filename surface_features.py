@@ -1,4 +1,8 @@
-# surface features
+# Calculate surface features for the measurement of text complexity:
+# get_text_length_in_token
+# get_average_sentence_length_in_token
+# get_average_characters_per_word
+# get_average_syllables_per_word
 import spacy
 import pyphen
 
@@ -58,7 +62,7 @@ def get_average_syllables_per_word(doc):
     return count_syllables(doc) / len(get_token(doc))
 
 
-def main():
+def demo():
     nlp = spacy.load("de_core_news_sm")
     text = "Das ist meine tolle Banane. " \
            "Die Banane ist reif. " \
@@ -84,5 +88,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    demo()
 

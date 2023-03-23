@@ -1,14 +1,17 @@
+# Calculate syntactic features for the measurement of text complexity:
+# get_average_number_of_noun_phrases_per_sentence,
+# get_average_heights,
+# get_average_number_of_subordinate_clauses_per_sentence,
+# get_average_count_of_sentences_with_verb_as_root,
+# get_average_count_of_sentences_with_nouns_as_root
 import spacy
 import statistics
 
 
-# syntactic features
 def get_average_number_of_noun_phrases_per_sentence(doc):
-    """
-    Computes the average number of noun phrases per sentence.
+    """ Computes the average number of noun phrases per sentence.
     :param doc: spacy.tokens.doc.Doc
-    :return: float
-    """
+    :return: float """
     noun_chunks = [chunk.text for chunk in doc.noun_chunks]
     return len(noun_chunks) / len(list(doc.sents))
 
@@ -18,23 +21,19 @@ def get_average_number_of_verb_phrases_per_sentence(doc):
 
 
 def get_average_number_of_subordinate_clauses_per_sentence(doc):
-    """
-    Computes the average number of subordinate clauses per sentence, based on
+    """Computes the average number of subordinate clauses per sentence, based on
     the assumption that in german a subordinate clause is always separated
     by a comma.
     :param doc: spacy.tokens.doc.Doc
-    :return: float
-    """
+    :return: float """
     comma_count = sum([sent.text.count(",") for sent in doc.sents])
     return comma_count / len(list(doc.sents))
 
 
 def tree_height(root):
-    """
-    Computes maximum height of sentence's dependency parse tree.
+    """Computes maximum height of sentence's dependency parse tree.
     :param root: spacy.tokens.token.Token
-    :return: int
-    """
+    :return: int """
     if not list(root.children):
         return 1
     else:
@@ -42,22 +41,26 @@ def tree_height(root):
 
 
 def get_average_heights(doc):
-    """
-    Computes average height of parse trees for each sentence in doc.
+    """Computes average height of parse trees for each sentence in doc.
     :param doc: spacy.tokens.doc.Doc
     :return: float
-    "Das ist eine tolle Banane. " == tree_height = 3
-    """
+    "Das ist eine tolle Banane. " == tree_height = 3 """
     roots = [sent.root for sent in doc.sents]
     return statistics.mean([tree_height(root) for root in roots])
 
 
 def get_average_count_of_sentences_with_verb_as_root(doc):
+    """Computes average sentence in doc with a verb as root.
+    :param doc: spacy.tokens.doc.Doc
+    :return: float """
     verb_as_root = [1 for tok in doc if tok.dep_ == "ROOT" and tok.pos_ == "VERB"]
     return sum(verb_as_root) / len(list(doc.sents))
 
 
 def get_average_count_of_sentences_with_nouns_as_root(doc):
+    """Computes average sentence in doc with a noun as root.
+    :param doc: spacy.tokens.doc.Doc
+    :return: float """
     noun_as_root = [1 for tok in doc if tok.dep_ == "ROOT" and tok.pos_ == "NOUN"]
     return sum(noun_as_root) / len(list(doc.sents))
 

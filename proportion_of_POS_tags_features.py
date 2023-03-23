@@ -1,4 +1,4 @@
-# Functions to get the  proportion of POS tags per text.
+# Functions to get the proportion of POS tags per text.
 # POS tag counts are normalized by dividing them by the number of tokens per text.
 # Number of tokens is defined without punctuations.
 import spacy
