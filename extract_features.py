@@ -33,8 +33,8 @@ from lexical_features import calculate_ttr, \
 from verb_tense_feature import get_average_number_of_verbs_in_sentence
 
 from discourse_features import \
-    get_average_number_of_pronouns_per_sentence, \
-    get_average_number_of_definite_articles_per_sentence
+    get_average_count_of_pronouns_per_sentence, \
+    get_average_count_of_definite_articles_per_sentence
 
 from semantic_similarity_features import \
     get_average_semantic_similarity_of_all_nouns, \
@@ -72,8 +72,8 @@ features = [
             # verb tense
             "average_number_of_verbs_in_sentence",
             # discourse features
-            "average_number_of_pronouns_per_sentence",
-            "average_number_of_definite_articles_per_sentence",
+            "average_count_of_pronouns_per_sentence",
+            "average_count_of_definite_articles_per_sentence",
             # semantic_similarity_features
             "average_semantic_similarity_of_all_nouns",
             "average_semantic_similarity_of_all_verbs",
@@ -115,8 +115,8 @@ def calculate_all_features(doc, nlp):
         # verb tense
         get_average_number_of_verbs_in_sentence(doc),
         # discourse features
-        get_average_number_of_pronouns_per_sentence(doc),
-        get_average_number_of_definite_articles_per_sentence(doc),
+        get_average_count_of_pronouns_per_sentence(doc),
+        get_average_count_of_definite_articles_per_sentence(doc),
         # semantic_similarity_features
         get_average_semantic_similarity_of_all_nouns(doc, nlp),
         get_average_semantic_similarity_of_all_verbs(doc, nlp),
@@ -187,7 +187,8 @@ def main():
 
 
 def demo():
-    nlp = spacy.load("de_core_news_sm")
+    #nlp = spacy.load("de_core_news_sm")
+    nlp = spacy.load("de_core_news_md")
     text = "Das ist meine tolle Banane. " \
            "Die Banane ist reif. " \
            "Sie existiert, um gegessen zu werden. " \
@@ -195,7 +196,7 @@ def demo():
         "Sie kann gegessen werden, weil sie essbar ist. " \
         "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
     doc = nlp(text)
-    vec = calculate_all_features(doc)
+    vec = calculate_all_features(doc, nlp)
     print(vec)
 
 

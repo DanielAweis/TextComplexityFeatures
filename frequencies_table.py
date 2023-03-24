@@ -2,17 +2,7 @@
 # based on this DeReWo corpus:
 # https://www.ids-mannheim.de/digspra/kl/projekte/methoden/derewo/
 # And provides a function to read in this list for further work.
-import json
-
-
-def get_frequency_table_from_json_file(json_file_path):
-    """Returns frequency table a dict with token as keys and freqs as values.
-    :param json_file_path: (str)
-    :return: dict """
-    with open(json_file_path, "r", encoding="utf-8") as file:
-        frequency_tabel = json.load(file)
-
-    return frequency_tabel
+from utils import save_to_json_file
 
 
 def get_token_frequencies_from_corpus(corpus_path):
@@ -35,15 +25,12 @@ def get_token_frequencies_from_corpus(corpus_path):
     return frequency_table
 
 
-def create_file_with_token_frequencies():
-    """Creates a json file in data with the frequency table a
-    dict with token as keys and freqs as values.
-    :param json_file_path: (str) """
+def main():
     corpus_path = "data/DeReWo/DeReKo-2014-II-MainArchive-STT.100000.freq"
     data = get_token_frequencies_from_corpus(corpus_path)
-    with open("token_freq_table.json", "w") as f:
-        json.dump(data, f)
+    tok_freq_out_file = "token_freq_table.json"
+    save_to_json_file(data, tok_freq_out_file)
 
 
 if __name__ == "__main__":
-    create_file_with_token_frequencies()
+    main()
