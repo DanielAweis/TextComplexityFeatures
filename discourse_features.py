@@ -1,10 +1,11 @@
 import spacy
+from utils import get_data_from_json_file
 
-from discourse_markers import get_discourse_markers_from_json_file
+discourse_markers = get_data_from_json_file("discourse_markers.json")
 
 
 # Cohesion features
-def get_average_number_of_pronouns_per_sentence(doc):
+def get_average_count_of_pronouns_per_sentence(doc):
     """
     Computes average number of pronouns per sentence.
     :param doc: spacy.tokens.doc.Doc
@@ -13,7 +14,7 @@ def get_average_number_of_pronouns_per_sentence(doc):
     return sum([1 for token in doc if token.pos_ == "PRON"]) / len(list(doc.sents))
 
 
-def get_average_number_of_definite_articles_per_sentence(doc):
+def get_average_count_of_definite_articles_per_sentence(doc):
     """
     Computes average number of definite articles for the sentences in doc, based on
     the assumption that in german the definite articles start with d|D to exclude
@@ -25,6 +26,18 @@ def get_average_number_of_definite_articles_per_sentence(doc):
     return def_articles_count / len(list(doc.sents))
 
 
+# coherence feature
+def get_average_count_of_discourse_markers_per_sentence(doc):
+    disc_markers = []
+
+    for token in doc:
+        for discourse_marker in discourse_markers:
+            if token.text.lower() == discourse_marker.lower():
+                disc_markers.append(discourse_marker)
+
+    return len(disc_markers) / len(list(doc.sents))
+
+
 def demo():
     nlp = spacy.load("de_core_news_sm")
     text = "Das ist meine tolle Banane. " \
@@ -34,17 +47,17 @@ def demo():
         "Sie kann gegessen werden, weil sie essbar ist. " \
         "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
     doc = nlp(text)
-    for sent in doc.sents:
-        print(sent)
 
-    discourse_markers = get_discourse_markers_from_json_file("discourse_markers.json")
-    print(discourse_markers)
+    print("Average count per sentence...")
+    print("... of pronouns:", get_average_count_of_pronouns_per_sentence(doc))
+    print("... of definite articles:", get_average_count_of_definite_articles_per_sentence(doc))
+    print("... of discourse markers:", get_average_count_of_discourse_markers_per_sentence(doc))
 
-    #for token in doc:
-        # print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
-        # token.shape_, token.is_alpha, token.is_stop)
-        #print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
-              #token.shape_, token.is_alpha, token.is_stop, list(token.morph))
+    # output
+    # Average count per sentence...
+    # ... of pronouns: 1.6666666666666667
+    # ... of definite articles: 0.16666666666666666
+    # ... of discourse markers: 0.5
 
 
 if __name__ == "__main__":
