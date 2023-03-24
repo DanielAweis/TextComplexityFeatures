@@ -1,6 +1,5 @@
 # This script generates a json file (discourse_markers.json) with a list of all
 # discourse markers (str) from the DimLex, a lexicon of german discourse markers.
-# And provides a function to read in this list for further work.
 # https://github.com/discourse-lab/dimlex/blob/master/DimLex-documentation.md
 
 from bs4 import BeautifulSoup

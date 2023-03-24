@@ -16,10 +16,6 @@ def get_average_number_of_noun_phrases_per_sentence(doc):
     return len(noun_chunks) / len(list(doc.sents))
 
 
-def get_average_number_of_verb_phrases_per_sentence(doc):
-    pass
-
-
 def get_average_number_of_subordinate_clauses_per_sentence(doc):
     """Computes the average number of subordinate clauses per sentence, based on
     the assumption that in german a subordinate clause is always separated

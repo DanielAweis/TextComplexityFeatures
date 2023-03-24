@@ -32,6 +32,7 @@ from lexical_features import calculate_ttr, \
 
 from verb_tense_feature import get_average_number_of_verbs_in_sentence
 
+# TODO integrate discourse feature
 from discourse_features import \
     get_average_count_of_pronouns_per_sentence, \
     get_average_count_of_definite_articles_per_sentence
@@ -108,7 +109,7 @@ def calculate_all_features(doc, nlp):
         get_POS_tag_proportion_for_pronouns(doc),
         get_POS_tag_proportion_for_conjunctions(doc),
         get_POS_tag_proportion_for_numerales(doc),
-        get_POS_tag_proportion_for_adpositions,
+        get_POS_tag_proportion_for_adpositions(doc),
         # lexical features
         calculate_ttr(doc),
         calculate_lexical_complexity_score(doc),
@@ -156,7 +157,8 @@ def main():
     small_klexikon = klexikon[:5]
     small_wiki = wiki[:5]
 
-    nlp = spacy.load("de_core_news_sm")
+    #nlp = spacy.load("de_core_news_sm")
+    nlp = spacy.load("de_core_news_md")
     result_small_miniklexi = get_features_for_all_docs(small_miniklexi, nlp)
     result_small_klexikon = get_features_for_all_docs(small_klexikon, nlp)
     result_small_wiki = get_features_for_all_docs(small_wiki, nlp)
@@ -201,5 +203,5 @@ def demo():
 
 
 if __name__ == "__main__":
-    #main()
-    demo()
+    main()
+    #demo()
