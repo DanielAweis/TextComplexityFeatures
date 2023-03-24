@@ -2,7 +2,7 @@
 import spacy
 import numpy as np
 
-from frequencies_table import  get_frequency_table_from_json_file
+from utils import get_data_from_json_file
 
 
 def calculate_ttr(doc):
@@ -10,9 +10,7 @@ def calculate_ttr(doc):
     :param doc: spacy.tokens.doc.Doc
     :return: float """
     lemmatized_words = [tok.lemma_ for tok in doc if not tok.is_punct and not tok.is_space]
-    print("lemmatized_words", lemmatized_words)
     unique_words = set(lemmatized_words)
-    print("unique_words", unique_words)
     return len(unique_words) / len(lemmatized_words)
 
 
@@ -27,12 +25,11 @@ def calculate_lexical_complexity_score(doc):
     :param tokens_freq: frequency table (dict: token as keys and freqs as values)
     :return: float """
     # based on this DeReWo corpus
-    json_file_path = "data/token_freq_table.json"
-    tokens_freq = get_frequency_table_from_json_file(json_file_path)
+    json_file_path = "token_freq_table.json"
+    tokens_freq = get_data_from_json_file(json_file_path)
 
     # tokenize and lemmatize the doc ignoring punctuation
     tokens = [tok.lemma_.lower() for tok in doc if not tok.is_punct]
-    print(tokens)
 
     # create a frequency table for the tokens in the doc
     tokens_freq_sentence = {}
