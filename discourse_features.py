@@ -58,6 +58,7 @@ def get_count_for_discourse_marker_senses(doc):
     dm_from_doc = find_discourse_markers(doc)
     # init empty vec
     counts_vec = list(repeat(0, len(all_disc_marker_senses)))
+    print(all_disc_marker_senses)
     for i in range(len(counts_vec)):
         for dm in dm_from_doc:
             if dm[1] == all_disc_marker_senses[i]:
