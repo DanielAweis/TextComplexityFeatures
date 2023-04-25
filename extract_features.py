@@ -35,7 +35,8 @@ from verb_tense_feature import get_average_number_of_verbs_in_sentence
 # TODO integrate discourse feature
 from discourse_features import \
     get_average_count_of_pronouns_per_sentence, \
-    get_average_count_of_definite_articles_per_sentence
+    get_average_count_of_definite_articles_per_sentence, \
+    get_average_count_of_discourse_markers_per_sentence
 
 from semantic_similarity_features import \
     get_average_semantic_similarity_of_all_nouns, \
@@ -75,6 +76,7 @@ features = [
             # discourse features
             "average_count_of_pronouns_per_sentence",
             "average_count_of_definite_articles_per_sentence",
+            "average_count_of_discourse_markers_per_sentence"
             # semantic_similarity_features
             "average_semantic_similarity_of_all_nouns",
             "average_semantic_similarity_of_all_verbs",
@@ -118,6 +120,7 @@ def calculate_all_features(doc, nlp):
         # discourse features
         get_average_count_of_pronouns_per_sentence(doc),
         get_average_count_of_definite_articles_per_sentence(doc),
+        get_average_count_of_discourse_markers_per_sentence(doc),
         # semantic_similarity_features
         get_average_semantic_similarity_of_all_nouns(doc, nlp),
         get_average_semantic_similarity_of_all_verbs(doc, nlp),
@@ -189,7 +192,6 @@ def small_data():
 
 
 def demo():
-    #nlp = spacy.load("de_core_news_sm")
     nlp = spacy.load("de_core_news_md")
     text = "Das ist meine tolle Banane. " \
            "Die Banane ist reif. " \
@@ -247,5 +249,5 @@ def main():
 
 if __name__ == "__main__":
     # small_data()
-    # demo()
-    main()
+    demo()
+    # main()
