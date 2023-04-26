@@ -1,4 +1,4 @@
-# This script generates a json file (discourse_markers.json) with a list of all
+# This script generates json files (discourse_markers.json) with e.g. a list of all
 # discourse markers (str) from the DimLex, a lexicon of german discourse markers.
 # https://github.com/discourse-lab/dimlex/blob/master/DimLex-documentation.md
 
@@ -52,6 +52,19 @@ def get_discourse_markers_with_sense(xml_data):
     return discours_marker_with_sense
 
 
+def get_rel_senses_with_discourse_marker(discourse_markers):
+    discourse_markers_sense_dict = dict()
+    for sense, discourse_marker in discourse_markers:
+        if sense not in discourse_markers_sense_dict.keys():
+            discourse_markers_sense_dict[sense] = [discourse_marker]
+        else:
+            act_dm = discourse_markers_sense_dict[sense]
+            act_dm.append(discourse_marker)
+            discourse_markers_sense_dict[sense] = act_dm
+
+    return discourse_markers_sense_dict
+
+
 def main():
     dimlex_file_path = "data/discourse-lab/dimlex/DimLex.xml"
     xml_data = read_DimLex_xml_file(dimlex_file_path)
@@ -64,6 +77,9 @@ def main():
 
     discourse_markers_with_sense = get_discourse_markers_with_sense(xml_data)
     save_to_json_file(discourse_markers_with_sense, "discourse_markers_with_sense.json")
+
+    rel_senses_with_discourse_marker = get_rel_senses_with_discourse_marker(discourse_markers_with_sense)
+    save_to_json_file(rel_senses_with_discourse_marker, "rel_senses_with_discourse_marker.json")
 
 
 if __name__ == "__main__":
