@@ -2,7 +2,7 @@ import csv
 import spacy
 from itertools import repeat
 
-from utils import get_data_from_json_file
+from utils_and_preprocess.utils import get_data_from_json_file
 
 # TODO: handle this in main script
 discourse_markers = get_data_from_json_file("discourse_markers.json")

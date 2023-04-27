@@ -2,7 +2,7 @@
 import spacy
 import numpy as np
 
-from utils import get_data_from_json_file
+from utils_and_preprocess.utils import get_data_from_json_file
 
 
 def calculate_ttr(doc):

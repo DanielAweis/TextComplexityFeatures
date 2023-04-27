@@ -3,7 +3,7 @@
 # https://github.com/discourse-lab/dimlex/blob/master/DimLex-documentation.md
 
 from bs4 import BeautifulSoup
-from utils import save_to_json_file
+from utils_and_preprocess.utils import save_to_json_file
 
 
 def read_DimLex_xml_file(file_path):

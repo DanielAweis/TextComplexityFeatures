@@ -2,20 +2,20 @@ import json
 import csv
 import spacy
 
-from surface_features import \
+from features.surface_features import \
     get_average_sentence_length_in_token, \
     get_average_characters_per_word, \
     get_average_syllables_per_word, \
     get_text_length_in_token
 
-from syntactic_features import \
+from features.syntactic_features import \
     get_average_number_of_noun_phrases_per_sentence, \
     get_average_heights, \
     get_average_number_of_subordinate_clauses_per_sentence, \
     get_average_count_of_sentences_with_verb_as_root, \
     get_average_count_of_sentences_with_nouns_as_root
 
-from proportion_of_POS_tags_features import \
+from features.proportion_of_POS_tags_features import \
     get_POS_tag_proportion_for_verbs, \
     get_POS_tag_proportion_for_aux_verbs, \
     get_POS_tag_proportion_for_nouns, \
@@ -27,18 +27,18 @@ from proportion_of_POS_tags_features import \
     get_POS_tag_proportion_for_numerales, \
     get_POS_tag_proportion_for_adpositions
 
-from lexical_features import calculate_ttr, \
+from features.lexical_features import calculate_ttr, \
     calculate_lexical_complexity_score
 
-from verb_tense_feature import get_average_number_of_verbs_in_sentence
+from features.verb_tense_feature import get_average_number_of_verbs_in_sentence
 
 # TODO integrate discourse feature
-from discourse_features import \
+from features.discourse_features import \
     get_average_count_of_pronouns_per_sentence, \
     get_average_count_of_definite_articles_per_sentence, \
     get_average_count_of_discourse_markers_per_sentence
 
-from semantic_similarity_features import \
+from features.semantic_similarity_features import \
     get_average_semantic_similarity_of_all_nouns, \
     get_average_semantic_similarity_of_all_verbs, \
     get_average_semantic_similarity_of_all_adjectives

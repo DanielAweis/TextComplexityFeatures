@@ -2,13 +2,14 @@ from os import scandir
 from pathlib import Path
 import spacy
 from extract_features import calculate_all_features
-from utils import save_to_json_file
+from utils_and_preprocess.utils import save_to_json_file
 
 
 def extract_features_for_all_docs(directory_path, nlp):
     """
-    Extracts for all documents in the directory the text complexity features
-    and saves this in a feature vector (list of nums).
+    Extracts the text complexity features for all documents in the directory
+    and saves this in a dict with file name as keys and feature vector (list of nums)
+    as value.
 
     :param directory_path: str
     :param nlp: spacy model

@@ -2,7 +2,7 @@
 # based on this DeReWo corpus:
 # https://www.ids-mannheim.de/digspra/kl/projekte/methoden/derewo/
 # And provides a function to read in this list for further work.
-from utils import save_to_json_file
+from utils_and_preprocess.utils import save_to_json_file
 
 
 def get_token_frequencies_from_corpus(corpus_path):
