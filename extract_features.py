@@ -2,6 +2,8 @@ import json
 import csv
 import spacy
 
+from utils_and_preprocess.constants import MINIKLEXI, KLEXIKON, WIKI
+
 from features.surface_features import \
     get_average_sentence_length_in_token, \
     get_average_characters_per_word, \
@@ -144,13 +146,9 @@ def get_features_for_all_docs(list_of_dicts, nlp):
 
 
 def small_data():
-    miniklexi_file_path = "data/miniklexi_corpus.txt"
-    klexikon_file_path = "data/klexi_corpus.txt"
-    wiki_file_path = "data/wiki_corpus.txt"
-
-    json_miniklexi = get_json_data_from_txt_file(miniklexi_file_path)
-    json_klexikon = get_json_data_from_txt_file(klexikon_file_path)
-    json_wiki = get_json_data_from_txt_file(wiki_file_path)
+    json_miniklexi = get_json_data_from_txt_file(MINIKLEXI)
+    json_klexikon = get_json_data_from_txt_file(KLEXIKON)
+    json_wiki = get_json_data_from_txt_file(WIKI)
 
     miniklexi = json_miniklexi["einfache"]  # label 0.0
     klexikon = json_klexikon["klexikon"]  # label 0.5
@@ -205,13 +203,9 @@ def demo():
 
 
 def main():
-    miniklexi_file_path = "data/miniklexi_corpus.txt"
-    klexikon_file_path = "data/klexi_corpus.txt"
-    wiki_file_path = "data/wiki_corpus.txt"
-
-    json_miniklexi = get_json_data_from_txt_file(miniklexi_file_path)
-    json_klexikon = get_json_data_from_txt_file(klexikon_file_path)
-    json_wiki = get_json_data_from_txt_file(wiki_file_path)
+    json_miniklexi = get_json_data_from_txt_file(MINIKLEXI)
+    json_klexikon = get_json_data_from_txt_file(KLEXIKON)
+    json_wiki = get_json_data_from_txt_file(WIKI)
 
     miniklexi = json_miniklexi["einfache"]  # label 0.0
     klexikon = json_klexikon["klexikon"]  # label 0.5

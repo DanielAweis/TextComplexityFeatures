@@ -3,6 +3,9 @@ import spacy
 import numpy as np
 
 from utils_and_preprocess.utils import get_data_from_json_file
+from utils_and_preprocess.constants import TOKEN_FREQ
+# based on the DeReWo corpus
+tokens_freq = get_data_from_json_file(TOKEN_FREQ)
 
 
 def calculate_ttr(doc):
@@ -24,9 +27,6 @@ def calculate_lexical_complexity_score(doc):
     :param doc: spacy.tokens.doc.Doc
     :param tokens_freq: frequency table (dict: token as keys and freqs as values)
     :return: float """
-    # based on this DeReWo corpus
-    json_file_path = "token_freq_table.json"
-    tokens_freq = get_data_from_json_file(json_file_path)
 
     # tokenize and lemmatize the doc ignoring punctuation
     tokens = [tok.lemma_.lower() for tok in doc if not tok.is_punct]

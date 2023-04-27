@@ -3,11 +3,12 @@ import spacy
 from itertools import repeat
 
 from utils_and_preprocess.utils import get_data_from_json_file
+from utils_and_preprocess.constants import DISCOURSE_MARKER, \
+    DISCOURSE_MARKER_WITH_SENSE, ALL_DISCOURSE_MARKER
 
-# TODO: handle this in main script
-discourse_markers = get_data_from_json_file("discourse_markers.json")
-discourse_markers_with_sense = get_data_from_json_file("discourse_markers_with_sense.json")
-all_disc_marker_senses = get_data_from_json_file("all_discourse_marker_senses.json")
+discourse_markers = get_data_from_json_file(DISCOURSE_MARKER)
+discourse_markers_with_sense = get_data_from_json_file(DISCOURSE_MARKER_WITH_SENSE)
+all_disc_marker_senses = get_data_from_json_file(ALL_DISCOURSE_MARKER)
 
 disc_marker_senses_to_index = dict()
 for i, value in enumerate(all_disc_marker_senses):
