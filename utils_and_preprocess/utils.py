@@ -47,3 +47,19 @@ def add_nummeric_label(vectores_file_path):
         writer.writerow(i for i in header)
         for line in data[1:]:
             writer.writerow(line)
+
+
+def safe_division(n, d):
+    return n / d if d else 0
+
+
+def check_input_validity(document_name, text, nlp):
+    if not text:
+        print("Empty file: ", document_name)
+    try:
+        doc = nlp(text)
+    except ValueError:
+        print("ValueError in document: ", document_name)
+    doc = nlp(text)
+    if len(list(doc.sents)) == 0:
+        print("No sentences in document: ", document_name)
