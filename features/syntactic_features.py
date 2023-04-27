@@ -6,6 +6,7 @@
 # get_average_count_of_sentences_with_nouns_as_root
 import spacy
 import statistics
+from utils_and_preprocess.utils import safe_division
 
 
 def get_average_number_of_noun_phrases_per_sentence(doc):
@@ -13,7 +14,7 @@ def get_average_number_of_noun_phrases_per_sentence(doc):
     :param doc: spacy.tokens.doc.Doc
     :return: float """
     noun_chunks = [chunk.text for chunk in doc.noun_chunks]
-    return len(noun_chunks) / len(list(doc.sents))
+    return safe_division(len(noun_chunks), len(list(doc.sents)))
 
 
 def get_average_number_of_subordinate_clauses_per_sentence(doc):
@@ -23,7 +24,7 @@ def get_average_number_of_subordinate_clauses_per_sentence(doc):
     :param doc: spacy.tokens.doc.Doc
     :return: float """
     comma_count = sum([sent.text.count(",") for sent in doc.sents])
-    return comma_count / len(list(doc.sents))
+    return safe_division(comma_count, len(list(doc.sents)))
 
 
 def tree_height(root):
@@ -42,7 +43,8 @@ def get_average_heights(doc):
     :return: float
     "Das ist eine tolle Banane. " == tree_height = 3 """
     roots = [sent.root for sent in doc.sents]
-    return statistics.mean([tree_height(root) for root in roots])
+    tree_heights = [tree_height(root) for root in roots]
+    return statistics.mean(tree_heights)
 
 
 def get_average_count_of_sentences_with_verb_as_root(doc):
@@ -50,7 +52,7 @@ def get_average_count_of_sentences_with_verb_as_root(doc):
     :param doc: spacy.tokens.doc.Doc
     :return: float """
     verb_as_root = [1 for tok in doc if tok.dep_ == "ROOT" and tok.pos_ == "VERB"]
-    return sum(verb_as_root) / len(list(doc.sents))
+    return safe_division(sum(verb_as_root), len(list(doc.sents)))
 
 
 def get_average_count_of_sentences_with_nouns_as_root(doc):
@@ -58,7 +60,7 @@ def get_average_count_of_sentences_with_nouns_as_root(doc):
     :param doc: spacy.tokens.doc.Doc
     :return: float """
     noun_as_root = [1 for tok in doc if tok.dep_ == "ROOT" and tok.pos_ == "NOUN"]
-    return sum(noun_as_root) / len(list(doc.sents))
+    return safe_division(sum(noun_as_root), len(list(doc.sents)))
 
 
 def demo():

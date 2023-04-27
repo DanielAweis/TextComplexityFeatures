@@ -1,4 +1,5 @@
 import spacy
+from utils_and_preprocess.utils import safe_division
 
 
 def get_verb_forms(doc):
@@ -33,7 +34,7 @@ def get_average_number_of_verbs_in_sentence(doc):
     # make a flat list
     # TODO: Do i need the information per sentence?
     num_of_verbs = len([verb for sent in verb_forms for verb in sent])
-    return num_of_verbs / len(list(doc.sents))
+    return safe_division(num_of_verbs, len(list(doc.sents)))
 
 
 def demo():

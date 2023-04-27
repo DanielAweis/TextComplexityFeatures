@@ -2,7 +2,7 @@ import csv
 import spacy
 from itertools import repeat
 
-from utils_and_preprocess.utils import get_data_from_json_file
+from utils_and_preprocess.utils import get_data_from_json_file, safe_division
 from utils_and_preprocess.constants import DISCOURSE_MARKER, \
     DISCOURSE_MARKER_WITH_SENSE, ALL_DISCOURSE_MARKER
 
@@ -39,7 +39,8 @@ def get_average_count_of_pronouns_per_sentence(doc):
     :param doc: spacy.tokens.doc.Doc
     :return: float
     """
-    return sum([1 for token in doc if token.pos_ == "PRON"]) / len(list(doc.sents))
+    pronouns = sum([1 for token in doc if token.pos_ == "PRON"])
+    return safe_division(pronouns, len(list(doc.sents)))
 
 
 def get_average_count_of_definite_articles_per_sentence(doc):
@@ -51,7 +52,7 @@ def get_average_count_of_definite_articles_per_sentence(doc):
     :return: float
     """
     def_articles_count = sum([1 for token in doc if token.tag_ == "ART" and token.text.startswith(("d", "D"))])
-    return def_articles_count / len(list(doc.sents))
+    return safe_division(def_articles_count, len(list(doc.sents)))
 
 
 # coherence feature
@@ -63,7 +64,7 @@ def get_average_count_of_discourse_markers_per_sentence(doc):
             if token.text.lower() == discourse_marker.lower():
                 disc_markers.append(discourse_marker)
 
-    return len(disc_markers) / len(list(doc.sents))
+    return safe_division(len(disc_markers), len(list(doc.sents)))
 
 
 def find_discourse_markers(doc):

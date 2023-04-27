@@ -2,6 +2,7 @@
 # POS tag counts are normalized by dividing them by the number of tokens per text.
 # Number of tokens is defined without punctuations.
 import spacy
+from utils_and_preprocess.utils import safe_division
 
 
 def get_POS_tag_proportion_for_verbs(doc):
@@ -11,7 +12,7 @@ def get_POS_tag_proportion_for_verbs(doc):
     :return: float """
     verb_pos_tags = sum([1 for tok in doc if tok.pos_ in ["VERB", "AUX"]])
     num_of_token_in_doc = sum([1 for tok in doc if not tok.is_punct])
-    return verb_pos_tags / num_of_token_in_doc
+    return safe_division(verb_pos_tags, num_of_token_in_doc)
 
 
 def get_POS_tag_proportion_for_aux_verbs(doc):
@@ -20,7 +21,7 @@ def get_POS_tag_proportion_for_aux_verbs(doc):
     :return: float """
     verb_pos_tags = sum([1 for tok in doc if tok.pos_ == "AUX"])
     num_of_token_in_doc = sum([1 for tok in doc if not tok.is_punct])
-    return verb_pos_tags / num_of_token_in_doc
+    return safe_division(verb_pos_tags, num_of_token_in_doc)
 
 
 def get_POS_tag_proportion_for_nouns(doc):
@@ -29,7 +30,7 @@ def get_POS_tag_proportion_for_nouns(doc):
     :return: float """
     noun_pos_tags = sum([1 for tok in doc if tok.pos_ == "NOUN"])
     num_of_token_in_doc = sum([1 for tok in doc if not tok.is_punct])
-    return noun_pos_tags / num_of_token_in_doc
+    return safe_division(noun_pos_tags, num_of_token_in_doc)
 
 
 def get_POS_tag_proportion_for_adjectives(doc):
@@ -38,7 +39,7 @@ def get_POS_tag_proportion_for_adjectives(doc):
     :return: float """
     adj_pos_tags = sum([1 for tok in doc if tok.tag_ in ["ADJD", "ADJA"]])
     num_of_token_in_doc = sum([1 for tok in doc if not tok.is_punct])
-    return adj_pos_tags / num_of_token_in_doc
+    return safe_division(adj_pos_tags, num_of_token_in_doc)
 
 
 def get_POS_tag_proportion_for_punctuations(doc):
@@ -47,7 +48,7 @@ def get_POS_tag_proportion_for_punctuations(doc):
     :return: float """
     punctuations_pos_tags = sum([1 for tok in doc if tok.pos_ == "PUNCT"])
     num_of_token_in_doc = len(doc)
-    return punctuations_pos_tags / num_of_token_in_doc
+    return safe_division(punctuations_pos_tags, num_of_token_in_doc)
 
 
 def get_POS_tag_proportion_for_determiners(doc):
@@ -56,7 +57,7 @@ def get_POS_tag_proportion_for_determiners(doc):
     :return: float """
     det_pos_tags = sum([1 for tok in doc if tok.pos_ == "DET"])
     num_of_token_in_doc = sum([1 for tok in doc if not tok.is_punct])
-    return det_pos_tags / num_of_token_in_doc
+    return safe_division(det_pos_tags, num_of_token_in_doc)
 
 
 def get_POS_tag_proportion_for_pronouns(doc):
@@ -65,7 +66,7 @@ def get_POS_tag_proportion_for_pronouns(doc):
     :return: float """
     pron_pos_tags = sum([1 for tok in doc if tok.pos_ == "PRON"])
     num_of_token_in_doc = sum([1 for tok in doc if not tok.is_punct])
-    return pron_pos_tags / num_of_token_in_doc
+    return safe_division(pron_pos_tags, num_of_token_in_doc)
 
 
 def get_POS_tag_proportion_for_conjunctions(doc):
@@ -74,7 +75,7 @@ def get_POS_tag_proportion_for_conjunctions(doc):
     :return: float """
     junc_pos_tags = sum([1 for tok in doc if tok.pos_ in ["SCONJ", "CCONJ"]])
     num_of_token_in_doc = sum([1 for tok in doc if not tok.is_punct])
-    return junc_pos_tags / num_of_token_in_doc
+    return safe_division(junc_pos_tags, num_of_token_in_doc)
 
 
 def get_POS_tag_proportion_for_numerales(doc):
@@ -83,7 +84,7 @@ def get_POS_tag_proportion_for_numerales(doc):
     :return: float """
     num_pos_tags = sum([1 for tok in doc if not tok.is_alpha])
     num_of_token_in_doc = sum([1 for tok in doc if not tok.is_punct])
-    return num_pos_tags / num_of_token_in_doc
+    return safe_division(num_pos_tags, num_of_token_in_doc)
 
 
 def get_POS_tag_proportion_for_adpositions(doc):
@@ -92,7 +93,7 @@ def get_POS_tag_proportion_for_adpositions(doc):
     :return: float """
     adp_pos_tags = sum([1 for tok in doc if tok.pos_ == "ADP"])
     num_of_token_in_doc = sum([1 for tok in doc if not tok.is_punct])
-    return adp_pos_tags / num_of_token_in_doc
+    return safe_division(adp_pos_tags, num_of_token_in_doc)
 
 
 def demo():

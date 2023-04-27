@@ -2,7 +2,7 @@
 import spacy
 import numpy as np
 
-from utils_and_preprocess.utils import get_data_from_json_file
+from utils_and_preprocess.utils import get_data_from_json_file, safe_division
 from utils_and_preprocess.constants import TOKEN_FREQ
 # based on the DeReWo corpus
 tokens_freq = get_data_from_json_file(TOKEN_FREQ)
@@ -14,7 +14,7 @@ def calculate_ttr(doc):
     :return: float """
     lemmatized_words = [tok.lemma_ for tok in doc if not tok.is_punct and not tok.is_space]
     unique_words = set(lemmatized_words)
-    return len(unique_words) / len(lemmatized_words)
+    return safe_division(len(unique_words), len(lemmatized_words))
 
 
 def calculate_lexical_complexity_score(doc):

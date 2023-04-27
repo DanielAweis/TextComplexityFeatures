@@ -5,11 +5,12 @@
 # get_average_syllables_per_word
 import spacy
 import pyphen
+from utils_and_preprocess.utils import safe_division
 
 
 def get_token(doc):
-    """Get token in a doc without punctuation."""
-    return [tok.text for tok in doc if not tok.is_punct]
+    """Get token count in a doc without punctuation."""
+    return len([tok.text for tok in doc if not tok.is_punct])
 
 
 def count_syllables(doc):
@@ -30,7 +31,7 @@ def get_text_length_in_token(doc):
     :param doc: spacy.tokens.doc.Doc
     :return: int
     """
-    return len(get_token(doc))
+    return get_token(doc)
 
 
 def get_average_sentence_length_in_token(doc):
@@ -39,7 +40,7 @@ def get_average_sentence_length_in_token(doc):
     :param doc: spacy.tokens.doc.Doc
     :return: float
     """
-    return len(get_token(doc)) / len(list(doc.sents))
+    return safe_division(get_token(doc), len(list(doc.sents)))
 
 
 def get_average_characters_per_word(doc):
@@ -49,7 +50,7 @@ def get_average_characters_per_word(doc):
     :return: float
     """
     char = sum([len(tok.text) for tok in doc if not tok.is_punct])
-    return char / len(get_token(doc))
+    return safe_division(char, get_token(doc))
 
 
 def get_average_syllables_per_word(doc):
@@ -59,7 +60,7 @@ def get_average_syllables_per_word(doc):
     :param doc: spacy.tokens.doc.Doc
     :return: float
     """
-    return count_syllables(doc) / len(get_token(doc))
+    return safe_division(count_syllables(doc), get_token(doc))
 
 
 def demo():

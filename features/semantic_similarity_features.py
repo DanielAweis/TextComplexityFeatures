@@ -1,6 +1,6 @@
 import spacy
 import itertools
-
+from utils_and_preprocess.utils import safe_division
 
 def get_all_lemmatized_nouns(doc):
     """Returns all lemmatized nouns of th text in a list.
@@ -47,7 +47,7 @@ def calculate_average_semantic_similarity(list_of_strings, nlp):
         if token1.has_vector and token2.has_vector:
             sem_sim += token1.similarity(token2)
 
-    average_semantic_similarity = sem_sim / len(list_of_strings)
+    average_semantic_similarity = safe_division(sem_sim, len(list_of_strings))
     return average_semantic_similarity
 
 
