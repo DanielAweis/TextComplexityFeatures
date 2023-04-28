@@ -53,13 +53,24 @@ def safe_division(n, d):
     return n / d if d else 0
 
 
-def check_input_validity(document_name, text, nlp):
+def validate_doc(text, nlp):
+    """
+    Validates the given text and returns True if all of the following conditions are met:
+    1. The text is not empty.
+    2. There is no Value Error when trying to parse the text.
+    3. The number of sentences is greater than zero.
+
+    :param document_name: Name of the document being validated, for error messages.
+    :param text: Text to be validated.
+    """
     if not text:
-        print("Empty file: ", document_name)
+        return False
     try:
         doc = nlp(text)
-    except ValueError:
-        print("ValueError in document: ", document_name)
-    doc = nlp(text)
-    if len(list(doc.sents)) == 0:
-        print("No sentences in document: ", document_name)
+        sentences = doc.sents
+    except ValueError as e:
+        return False
+    if not sentences:
+        return False
+
+    return True
