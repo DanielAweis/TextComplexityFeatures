@@ -54,15 +54,13 @@ def safe_division(n, d):
 
 
 def validate_doc(text, nlp):
-    """
-    Validates the given text and returns True if all of the following conditions are met:
+    """Validates the given text and returns True if all of the following conditions are met:
     1. The text is not empty.
     2. There is no Value Error when trying to parse the text.
     3. The number of sentences is greater than zero.
 
-    :param document_name: Name of the document being validated, for error messages.
     :param text: Text to be validated.
-    """
+    :return: bool """
     if not text:
         return False
     try:
