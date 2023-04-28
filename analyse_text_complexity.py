@@ -1,8 +1,14 @@
+import spacy
+import csv
+
 from os import scandir
 from pathlib import Path
-import spacy
+
 from extract_features import calculate_all_features
-from utils_and_preprocess.utils import save_to_json_file, validate_doc
+
+from utils_and_preprocess.constants import FEATURES
+from utils_and_preprocess.utils import save_to_json_file, validate_doc, \
+    create_feature_to_idx_dict
 
 
 def extract_features_for_all_docs(directory_path, nlp):
@@ -39,6 +45,23 @@ def main():
     nlp = spacy.load("de_core_news_md")
     text_complexity_features = extract_features_for_all_docs(summaries_dir_path, nlp)
     save_to_json_file(text_complexity_features, "text_complexity_feature_vectors.json")
+
+    # create a feature to index dict to keep track of order of elements
+    feature_to_index = create_feature_to_idx_dict(FEATURES)
+
+    # save results in one csv file
+    header = ["#id"]
+    header_features = list(feature_to_index.keys())
+    header.extend(header_features)
+
+    with open("result_vectors.csv", "w", encoding="utf-8") as csv_ofile:
+        writer = csv.writer(csv_ofile, delimiter=',')
+        writer.writerow(i for i in header)
+        for key, value in sorted(text_complexity_features.items()):
+            line = [key]
+            vecs = [round(i, 6) for i in value]
+            line.extend(vecs)
+            writer.writerow(line)
 
 
 if __name__ == '__main__':

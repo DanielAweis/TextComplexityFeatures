@@ -5,7 +5,8 @@ import csv
 def get_data_from_json_file(json_file_path):
     """Returns data as json object.
     :param json_file_path: (str)
-    :return: dict """
+    :return: dict
+    """
     with open(json_file_path, "r", encoding="utf-8") as file:
         data = json.load(file)
 
@@ -18,7 +19,6 @@ def save_to_json_file(data, file_path):
 
 
 def add_nummeric_label(vectores_file_path):
-    # "data/feature_vectors_L.csv"
     data = []
     with open(vectores_file_path, "r", encoding="utf-8") as file:
         for line in file:
@@ -50,25 +50,40 @@ def add_nummeric_label(vectores_file_path):
 
 
 def safe_division(n, d):
+    """Divides two numbers and returns the result, or 0 if the d is 0."""
     return n / d if d else 0
 
 
 def validate_doc(text, nlp):
-    """Validates the given text and returns True if all of the following conditions are met:
+    """Validates the text and returns True if all of the following conditions are met:
     1. The text is not empty.
     2. There is no Value Error when trying to parse the text.
     3. The number of sentences is greater than zero.
-
-    :param text: Text to be validated.
-    :return: bool """
+    :param text (str): Text to be validated.
+    :return: bool
+    """
     if not text:
         return False
     try:
         doc = nlp(text)
         sentences = doc.sents
-    except ValueError as e:
+    except ValueError:
         return False
     if not sentences:
         return False
 
     return True
+
+
+def create_feature_to_idx_dict(features):
+    """ Creates a dictionary that maps each feature to its index in the input list
+     to keep track of order of elements and for the header for the data frame.
+    :param features: A list of features.
+    :return: dict
+    """
+    feature_to_index = dict()
+    for i, value in enumerate(features):
+        feature = "".join(value)
+        feature_to_index[feature] = i
+
+    return feature_to_index
