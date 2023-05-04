@@ -44,7 +44,7 @@ def main():
     summaries_dir_path = "data/model_summaries/"
     nlp = spacy.load("de_core_news_md")
     text_complexity_features = extract_features_for_all_docs(summaries_dir_path, nlp)
-    save_to_json_file(text_complexity_features, "text_complexity_feature_vectors.json")
+    # save_to_json_file(text_complexity_features, "text_complexity_feature_vectors.json")
 
     # create a feature to index dict to keep track of order of elements
     feature_to_index = create_feature_to_idx_dict(FEATURES)
