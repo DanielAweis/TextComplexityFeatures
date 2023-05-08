@@ -32,15 +32,16 @@ from features.lexical_features import calculate_ttr, \
 
 from features.verb_tense_feature import get_average_number_of_verbs_in_sentence
 
-from features.discourse_features import \
-    get_average_count_of_pronouns_per_sentence, \
-    get_average_count_of_definite_articles_per_sentence, \
-    get_average_count_of_discourse_markers_per_sentence
-
 from features.semantic_similarity_features import \
     get_average_semantic_similarity_of_all_nouns, \
     get_average_semantic_similarity_of_all_verbs, \
     get_average_semantic_similarity_of_all_adjectives
+
+from features.discourse_features import \
+    get_average_count_of_pronouns_per_sentence, \
+    get_average_count_of_definite_articles_per_sentence, \
+    get_average_count_of_discourse_markers_per_sentence, \
+    get_count_for_discourse_marker_senses
 
 
 def create_feature_to_idx_dict(features):
@@ -58,43 +59,48 @@ def create_feature_to_idx_dict(features):
 
 
 def calculate_features(doc, nlp):
-    return [
-        # surface features
-        get_average_sentence_length_in_token(doc),
-        get_average_characters_per_word(doc),
-        get_average_syllables_per_word(doc),
-        get_text_length_in_token(doc),
-        # syntactic features
-        get_average_number_of_noun_phrases_per_sentence(doc),
-        get_average_heights(doc),
-        get_average_number_of_subordinate_clauses_per_sentence(doc),
-        get_average_count_of_sentences_with_verb_as_root(doc),
-        get_average_count_of_sentences_with_nouns_as_root(doc),
-        # POS tag features
-        get_POS_tag_proportion_for_verbs(doc),
-        get_POS_tag_proportion_for_aux_verbs(doc),
-        get_POS_tag_proportion_for_nouns(doc),
-        get_POS_tag_proportion_for_adjectives(doc),
-        get_POS_tag_proportion_for_punctuations(doc),
-        get_POS_tag_proportion_for_determiners(doc),
-        get_POS_tag_proportion_for_pronouns(doc),
-        get_POS_tag_proportion_for_conjunctions(doc),
-        get_POS_tag_proportion_for_numerales(doc),
-        get_POS_tag_proportion_for_adpositions(doc),
-        # lexical features
-        calculate_ttr(doc),
-        calculate_lexical_complexity_score(doc),
-        # verb tense
-        get_average_number_of_verbs_in_sentence(doc),
-        # discourse features
-        get_average_count_of_pronouns_per_sentence(doc),
-        get_average_count_of_definite_articles_per_sentence(doc),
-        get_average_count_of_discourse_markers_per_sentence(doc),
-        # semantic_similarity_features
-        get_average_semantic_similarity_of_all_nouns(doc, nlp),
-        get_average_semantic_similarity_of_all_verbs(doc, nlp),
-        get_average_semantic_similarity_of_all_adjectives(doc, nlp)
-    ]
+    result = [
+            # surface features
+            get_average_sentence_length_in_token(doc),
+            get_average_characters_per_word(doc),
+            get_average_syllables_per_word(doc),
+            get_text_length_in_token(doc),
+            # syntactic features
+            get_average_number_of_noun_phrases_per_sentence(doc),
+            get_average_heights(doc),
+            get_average_number_of_subordinate_clauses_per_sentence(doc),
+            get_average_count_of_sentences_with_verb_as_root(doc),
+            get_average_count_of_sentences_with_nouns_as_root(doc),
+            # POS tag features
+            get_POS_tag_proportion_for_verbs(doc),
+            get_POS_tag_proportion_for_aux_verbs(doc),
+            get_POS_tag_proportion_for_nouns(doc),
+            get_POS_tag_proportion_for_adjectives(doc),
+            get_POS_tag_proportion_for_punctuations(doc),
+            get_POS_tag_proportion_for_determiners(doc),
+            get_POS_tag_proportion_for_pronouns(doc),
+            get_POS_tag_proportion_for_conjunctions(doc),
+            get_POS_tag_proportion_for_numerales(doc),
+            get_POS_tag_proportion_for_adpositions(doc),
+            # lexical features
+            calculate_ttr(doc),
+            calculate_lexical_complexity_score(doc),
+            # verb tense
+            get_average_number_of_verbs_in_sentence(doc),
+            # semantic_similarity_features
+            get_average_semantic_similarity_of_all_nouns(doc, nlp),
+            get_average_semantic_similarity_of_all_verbs(doc, nlp),
+            get_average_semantic_similarity_of_all_adjectives(doc, nlp),
+            # discourse features
+            get_average_count_of_pronouns_per_sentence(doc),
+            get_average_count_of_definite_articles_per_sentence(doc),
+            get_average_count_of_discourse_markers_per_sentence(doc)
+            ]
+    # this returns a vector
+    dms_vec = get_count_for_discourse_marker_senses(doc)
+    # extend the result vector with the discourse marker senses vector
+    result.extend(dms_vec)
+    return result
 
 
 def demo():

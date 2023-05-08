@@ -39,11 +39,41 @@ FEATURES = [
             "lexical_complexity_score",
             # verb tense
             "average_number_of_verbs_in_sentence",
-            # discourse features
-            "average_count_of_pronouns_per_sentence",
-            "average_count_of_definite_articles_per_sentence",
-            "average_count_of_discourse_markers_per_sentence"
             # semantic_similarity_features
             "average_semantic_similarity_of_all_nouns",
             "average_semantic_similarity_of_all_verbs",
-            "average_semantic_similarity_of_all_adjectives"]
+            "average_semantic_similarity_of_all_adjectives",
+            # discourse features
+            "average_count_of_pronouns_per_sentence",
+            "average_count_of_definite_articles_per_sentence",
+            "average_count_of_discourse_markers_per_sentence",
+            # discourse marker senses
+            "",
+            "Contingency.Cause.Reason",
+            "Expansion.Substitution.Arg2-as-subst",
+            "Contingency.Cause.Result",
+            "Contingency.Purpose.Arg1-as-goal",
+            "Expansion.Conjunction",
+            "Temporal.Asynchronous.Succession",
+            "Comparison.Contrast",
+            "Temporal.Asynchronous.Precedence",
+            "Expansion.Exception.Arg2-as-except",
+            "Comparison.Concession.Arg1-as-denier",
+            "Contingency.Negative-condition.Arg2-as-negCond",
+            "Expansion.Disjunction",
+            "Expansion.Manner.Arg1-as-manner",
+            "Expansion.Level-of-detail.Arg1-as-detail",
+            "Contingency.Negative-condition.Arg1-as-negCond",
+            "Comparison.Concession.Arg2-as-denier",
+            "Temporal.Synchronous",
+            "Contingency.Purpose.Arg2-as-goal",
+            "Expansion.Exception.Arg1-as-except",
+            "Expansion.Instantiation",
+            "Expansion.Level-of-detail.Arg2-as-detail",
+            "Expansion.Substitution.Arg1-as-subst",
+            "Contingency.Condition.Arg1-as-cond",
+            "Expansion.Instantiation.Arg2-as-instance",
+            "Contingency.Condition.Arg2-as-cond",
+            "Expansion.Equivalence",
+            "Expansion.Manner.Arg2-as-manner"
+            ]
