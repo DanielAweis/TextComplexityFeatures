@@ -1,9 +1,6 @@
-import csv
 import spacy
 
-from utils_and_preprocess.constants import MINIKLEXI, KLEXIKON, WIKI, FEATURES
-from utils_and_preprocess.utils import create_feature_to_idx_dict, \
-    get_data_from_json_file
+from utils_and_preprocess.constants import FEATURES
 
 from features.surface_features import \
     get_average_sentence_length_in_token, \
@@ -35,7 +32,6 @@ from features.lexical_features import calculate_ttr, \
 
 from features.verb_tense_feature import get_average_number_of_verbs_in_sentence
 
-# TODO integrate discourse feature
 from features.discourse_features import \
     get_average_count_of_pronouns_per_sentence, \
     get_average_count_of_definite_articles_per_sentence, \
@@ -47,7 +43,21 @@ from features.semantic_similarity_features import \
     get_average_semantic_similarity_of_all_adjectives
 
 
-def calculate_all_features(doc, nlp):
+def create_feature_to_idx_dict(features):
+    """ Creates a dictionary that maps each feature to its index in the input list
+     to keep track of order of elements and for the header for the data frame.
+    :param features: A list of features.
+    :return: dict
+    """
+    feature_to_index = dict()
+    for i, value in enumerate(features):
+        feature = "".join(value)
+        feature_to_index[feature] = i
+
+    return feature_to_index
+
+
+def calculate_features(doc, nlp):
     return [
         # surface features
         get_average_sentence_length_in_token(doc),
@@ -87,58 +97,6 @@ def calculate_all_features(doc, nlp):
     ]
 
 
-def get_features_for_all_docs(list_of_dicts, nlp):
-    results = dict()
-    for elem in list_of_dicts:
-        doc = nlp(elem["text"])
-        vec = calculate_all_features(doc, nlp)
-        results[elem["id"]] = vec
-    return results
-
-
-def small_data():
-    json_miniklexi = get_data_from_json_file(MINIKLEXI)
-    json_klexikon = get_data_from_json_file(KLEXIKON)
-    json_wiki = get_data_from_json_file(WIKI)
-
-    small_miniklexi = json_miniklexi["einfache"][:5] # label 0.0
-    small_klexikon = json_klexikon["klexikon"][:5]  # label 0.5
-    small_wiki = json_wiki["wiki"][:5]  # label 1.0
-
-    nlp = spacy.load("de_core_news_md")
-
-    result_small_miniklexi = get_features_for_all_docs(small_miniklexi, nlp)
-    result_small_klexikon = get_features_for_all_docs(small_klexikon, nlp)
-    result_small_wiki = get_features_for_all_docs(small_wiki, nlp)
-
-    # create a feature to index dict to keep track of order of elements
-    feature_to_index = create_feature_to_idx_dict(FEATURES)
-
-    # save results in one csv file
-    header = ["#id", "#label"]
-    header_features = list(feature_to_index.keys())
-    header.extend(header_features)
-
-    with open("data/small_feature_vectors.csv", "w", encoding="utf-8") as csv_ofile:
-        writer = csv.writer(csv_ofile, delimiter=',')
-        writer.writerow(i for i in header)
-        for key, value in sorted(result_small_miniklexi.items()):
-            line = [f"miniklexi_{key}", 0.0]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
-        for key, value in sorted(result_small_klexikon.items()):
-            line = [f"klexikon_{key}", 0.5]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
-        for key, value in sorted(result_small_wiki.items()):
-            line = [f"wiki_{key}", 1.0]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
-
-
 def demo():
     nlp = spacy.load("de_core_news_md")
     text = "Das ist meine tolle Banane. " \
@@ -148,53 +106,12 @@ def demo():
            "Sie kann gegessen werden, weil sie essbar ist. " \
            "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
     doc = nlp(text)
-    vec = calculate_all_features(doc, nlp)
+    vec = calculate_features(doc, nlp)
+    feature_to_index = create_feature_to_idx_dict(FEATURES)
+    header_features = list(feature_to_index.keys())
+    print(header_features)
     print(vec)
 
 
-def main():
-    json_miniklexi = get_data_from_json_file(MINIKLEXI)
-    json_klexikon = get_data_from_json_file(KLEXIKON)
-    json_wiki = get_data_from_json_file(WIKI)
-
-    miniklexi = json_miniklexi["einfache"]  # label 0.0
-    klexikon = json_klexikon["klexikon"]  # label 0.5
-    wiki = json_wiki["wiki"]  # label 1.0
-
-    nlp = spacy.load("de_core_news_md")
-    result_miniklexi = get_features_for_all_docs(miniklexi, nlp)
-    result_klexikon = get_features_for_all_docs(klexikon, nlp)
-    result_wiki = get_features_for_all_docs(wiki, nlp)
-
-    # create a feature to index dict to keep track of order of elements
-    feature_to_index = create_feature_to_idx_dict(FEATURES)
-
-    # save results in one csv file
-    header = ["#id", "#label"]
-    header_features = list(feature_to_index.keys())
-    header.extend(header_features)
-
-    with open("data/feature_vectors.csv", "w", encoding="utf-8") as csv_ofile:
-        writer = csv.writer(csv_ofile, delimiter=',')
-        writer.writerow(i for i in header)
-        for key, value in sorted(result_miniklexi.items()):
-            line = [f"miniklexi_{key}", 0.0]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
-        for key, value in sorted(result_klexikon.items()):
-            line = [f"klexikon_{key}", 0.5]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
-        for key, value in sorted(result_wiki.items()):
-            line = [f"wiki_{key}", 1.0]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
-
-
 if __name__ == "__main__":
-    # small_data()
     demo()
-    # main()
