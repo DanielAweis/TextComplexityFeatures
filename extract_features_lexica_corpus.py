@@ -82,7 +82,7 @@ def main():
     header_features = list(feature_to_index.keys())
     header.extend(header_features)
 
-    with open("data/feature_vectors.csv", "w", encoding="utf-8") as csv_ofile:
+    with open("lexica_corpus_text_complexity.csv", "w", encoding="utf-8") as csv_ofile:
         writer = csv.writer(csv_ofile, delimiter=',')
         writer.writerow(i for i in header)
         for key, value in sorted(result_miniklexi.items()):

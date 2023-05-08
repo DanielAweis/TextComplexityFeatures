@@ -1,14 +1,14 @@
 import spacy
 import csv
+import click
 
 from os import scandir
 from pathlib import Path
 
-from extract_features import calculate_all_features
+from extract_features import calculate_features, create_feature_to_idx_dict
 
 from utils_and_preprocess.constants import FEATURES
-from utils_and_preprocess.utils import save_to_json_file, validate_doc, \
-    create_feature_to_idx_dict
+from utils_and_preprocess.utils import validate_doc
 
 
 def extract_features_for_all_docs(directory_path, nlp):
@@ -34,35 +34,59 @@ def extract_features_for_all_docs(directory_path, nlp):
                     continue
 
                 doc = nlp(text)
-                feature_vector = calculate_all_features(doc, nlp)
+                feature_vector = calculate_features(doc, nlp)
                 results[document.name.strip(".txt")] = feature_vector
 
     return results
 
 
-def main():
-    summaries_dir_path = "data/model_summaries/"
-    nlp = spacy.load("de_core_news_md")
-    text_complexity_features = extract_features_for_all_docs(summaries_dir_path, nlp)
-    # save_to_json_file(text_complexity_features, "text_complexity_feature_vectors.json")
+@click.command()
+@click.option("-d", "demo", type=bool, default=False, help="If you want to see a small demo.")
+@click.option("-p", "directory_path", type=str, default=True, help="The directory path (str)"
+                                                                   " - containing the documents with"
+                                                                   " texts for which the text complexity"
+                                                                   " features are to be extracted.")
+@click.option("-o", "output_path", type=str, default=True, help="The path (str) for the output file "
+                                                                "in which the extracted features are "
+                                                                "saved as a dataframe in csv format.")
+def cli(demo, directory_path, output_path):
+    if demo:
+        play_demo()
+    else:
+        #summaries_dir_path = "data/model_summaries/"
+        nlp = spacy.load("de_core_news_md")
+        text_complexity_features = extract_features_for_all_docs(directory_path, nlp)
 
-    # create a feature to index dict to keep track of order of elements
-    feature_to_index = create_feature_to_idx_dict(FEATURES)
+        # create a feature to index dict to keep track of order of elements
+        feature_to_index = create_feature_to_idx_dict(FEATURES)
 
-    # save results in one csv file
-    header = ["#id"]
-    header_features = list(feature_to_index.keys())
-    header.extend(header_features)
+        # save results in one csv file
+        header = ["#id"]
+        header_features = list(feature_to_index.keys())
+        header.extend(header_features)
 
-    with open("result_vectors.csv", "w", encoding="utf-8") as csv_ofile:
-        writer = csv.writer(csv_ofile, delimiter=',')
-        writer.writerow(i for i in header)
-        for key, value in sorted(text_complexity_features.items()):
-            line = [key]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
+        with open(output_path, "w", encoding="utf-8") as csv_ofile:
+            writer = csv.writer(csv_ofile, delimiter=',')
+            writer.writerow(i for i in header)
+            for key, value in sorted(text_complexity_features.items()):
+                line = [key]
+                vecs = [round(i, 6) for i in value]
+                line.extend(vecs)
+                writer.writerow(line)
+
+
+@click.command()
+@click.option("-demo", "demo", type=bool, default=False, help="If you want to see a small demo.")
+@click.option("-d", "directory_path", type=str, default=True, help="The directory path (str) - containing the documents with texts for which the text complexity features are to be extracted.")
+@click.option("-o", "output_path", type=str, default=True, help="The path (str) for the output file in which the extracted features are saved as a dataframe in csv format.")
+def test_main(directory_path, output_path):
+    print(directory_path)
+    print(output_path)
+
+
+def play_demo():
+    print("demo")
 
 
 if __name__ == '__main__':
-    main()
+    cli()
