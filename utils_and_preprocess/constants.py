@@ -1,6 +1,11 @@
 MINIKLEXI = "data/miniklexi_corpus.txt"
 KLEXIKON = "data/klexi_corpus.txt"
 WIKI = "data/wiki_corpus.txt"
+# demo
+DEMO_MINIKLEXI = "demo_data/demo_miniklexi_corpus.txt"
+DEMO_KLEXIKON = "demo_data/demo_klexi_corpus.txt"
+DEMO_WIKI = "demo_data/demo_wiki_corpus.txt"
+# tables
 TOKEN_FREQ = "generated_tables/token_freq_table.json"
 DISCOURSE_MARKER = "generated_tables/discourse_markers.json"
 DISCOURSE_MARKER_WITH_SENSE = "generated_tables/discourse_markers_with_sense.json"

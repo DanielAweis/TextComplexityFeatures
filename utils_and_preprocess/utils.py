@@ -74,16 +74,3 @@ def validate_doc(text, nlp):
 
     return True
 
-
-def create_feature_to_idx_dict(features):
-    """ Creates a dictionary that maps each feature to its index in the input list
-     to keep track of order of elements and for the header for the data frame.
-    :param features: A list of features.
-    :return: dict
-    """
-    feature_to_index = dict()
-    for i, value in enumerate(features):
-        feature = "".join(value)
-        feature_to_index[feature] = i
-
-    return feature_to_index
