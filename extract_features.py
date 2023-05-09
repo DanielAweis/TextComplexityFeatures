@@ -1,3 +1,10 @@
+# This script extracts surface, syntactic, pos tag, lexical, temporal, semantic and
+# discourse relevant features related to text complexity. The extracted features are
+# stored in a CSV file. The script can be used in the command line. The parameters
+# to be specified are the path to the folder containing the texts from which the
+# features are to be extracted. And the name of the file in which the results are to
+# be saved. An example call of the script could look like this:
+# $ python extract_features.py  -p "dir_to_data/" -o "output_file_name"
 import spacy
 import click
 import csv
@@ -5,6 +12,9 @@ import csv
 from os import scandir
 from pathlib import Path
 
+# The list of all features can be found in the file utils.constants
+# under FEATURES. This also facilitates the quick adjustment of the
+# feature set.
 from utils_and_preprocess.constants import FEATURES
 from utils_and_preprocess.utils import validate_doc
 
@@ -51,8 +61,9 @@ from features.discourse_features import \
 
 
 def create_feature_to_idx_dict(features):
-    """ Creates a dictionary that maps each feature to its index in the input list
+    """Creates a dictionary that maps each feature to its index in the input list
      to keep track of order of elements and for the header for the data frame.
+
     :param features: A list of features.
     :return: dict
     """
@@ -65,6 +76,14 @@ def create_feature_to_idx_dict(features):
 
 
 def calculate_features(doc, nlp):
+    """Calls all functions that extract the linguistic features of text complexity.
+    Returns a list of numbers (vector). If the list of features to be extracted
+    changes, then the order here and in utils.constants FEATURES must be aligned.
+
+    :param doc: spacy.tokens.doc.Doc
+    :param nlp: spacy model
+    :return: a list of numbers
+    """
     result = [
             # surface features
             get_average_sentence_length_in_token(doc),
@@ -110,8 +129,7 @@ def calculate_features(doc, nlp):
 
 
 def extract_features_for_all_docs(directory_path, nlp):
-    """
-    Extracts the text complexity features for all documents in the directory
+    """Extracts the text complexity features for all documents in the directory
     and saves this in a dict with file name as keys and feature vector (list of nums)
     as value.
 
