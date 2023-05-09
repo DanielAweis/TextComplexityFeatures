@@ -13,7 +13,7 @@ import click
 
 from extract_features import calculate_features, create_feature_to_idx_dict
 
-from utils_and_preprocess.constants import MINIKLEXI, KLEXIKON, WIKI, FEATURES, \
+from constants import MINIKLEXI, KLEXIKON, WIKI, FEATURES, \
     DEMO_MINIKLEXI, DEMO_KLEXIKON, DEMO_WIKI
 from utils_and_preprocess.utils import get_data_from_json_file
 

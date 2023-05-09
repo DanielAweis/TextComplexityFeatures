@@ -15,8 +15,8 @@ from pathlib import Path
 # The list of all features can be found in the file utils.constants
 # under FEATURES. This also facilitates the quick adjustment of the
 # feature set.
-from utils_and_preprocess.constants import FEATURES
-from utils_and_preprocess.utils import validate_doc
+from constants import FEATURES
+from utils_and_preprocess.utils import validate_doc, get_data_from_json_file
 
 from features.surface_features import \
     get_average_sentence_length_in_token, \
@@ -43,6 +43,10 @@ from features.proportion_of_POS_tags_features import \
     get_POS_tag_proportion_for_numerales, \
     get_POS_tag_proportion_for_adpositions
 
+from constants import TOKEN_FREQ
+# based on the DeReWo corpus
+# https://www.ids-mannheim.de/digspra/kl/projekte/methoden/derewo/
+
 from features.lexical_features import calculate_ttr, \
     calculate_lexical_complexity_score
 
@@ -52,6 +56,9 @@ from features.semantic_similarity_features import \
     get_average_semantic_similarity_of_all_nouns, \
     get_average_semantic_similarity_of_all_verbs, \
     get_average_semantic_similarity_of_all_adjectives
+
+from constants import DISCOURSE_MARKER, \
+    DISCOURSE_MARKER_WITH_SENSE, ALL_DISCOURSE_MARKER
 
 from features.discourse_features import \
     get_average_count_of_pronouns_per_sentence, \
@@ -75,13 +82,15 @@ def create_feature_to_idx_dict(features):
     return feature_to_index
 
 
-def calculate_features(doc, nlp):
+def calculate_features(doc, nlp, tokens_freq, discourse_marker):
     """Calls all functions that extract the linguistic features of text complexity.
     Returns a list of numbers (vector). If the list of features to be extracted
     changes, then the order here and in utils.constants FEATURES must be aligned.
 
     :param doc: spacy.tokens.doc.Doc
     :param nlp: spacy model
+    :param tokens_freq: token frequencies dict
+    :param discourse_marker: dict of discourse markers and senses
     :return: a list of numbers
     """
     result = [
@@ -109,7 +118,7 @@ def calculate_features(doc, nlp):
             get_POS_tag_proportion_for_adpositions(doc),
             # lexical features
             calculate_ttr(doc),
-            calculate_lexical_complexity_score(doc),
+            calculate_lexical_complexity_score(doc, tokens_freq),
             # verb tense
             get_average_number_of_verbs_in_sentence(doc),
             # semantic_similarity_features
@@ -119,22 +128,25 @@ def calculate_features(doc, nlp):
             # discourse features
             get_average_count_of_pronouns_per_sentence(doc),
             get_average_count_of_definite_articles_per_sentence(doc),
-            get_average_count_of_discourse_markers_per_sentence(doc)
+            get_average_count_of_discourse_markers_per_sentence(doc, discourse_marker["disc_marker"])
             ]
     # this returns a vector
-    dms_vec = get_count_for_discourse_marker_senses(doc)
+    dms_vec = get_count_for_discourse_marker_senses(doc, discourse_marker["all_disc_marker_senses"],
+                                                    discourse_marker["discourse_markers_with_sense"])
     # extend the result vector with the discourse marker senses vector
     result.extend(dms_vec)
     return result
 
 
-def extract_features_for_all_docs(directory_path, nlp):
+def extract_features_for_all_docs(directory_path, nlp, tokens_freq, discourse_marker):
     """Extracts the text complexity features for all documents in the directory
     and saves this in a dict with file name as keys and feature vector (list of nums)
     as value.
 
     :param directory_path: str
     :param nlp: spacy model
+    :param tokens_freq: token frequencies dict
+    :param discourse_marker: dict of discourse markers and senses
     :return: dict
     """
     results = dict()
@@ -150,7 +162,7 @@ def extract_features_for_all_docs(directory_path, nlp):
                     continue
 
                 doc = nlp(text)
-                feature_vector = calculate_features(doc, nlp)
+                feature_vector = calculate_features(doc, nlp, tokens_freq, discourse_marker)
                 results[document.name.strip(".txt")] = feature_vector
 
     return results
@@ -165,7 +177,19 @@ def play_demo():
            "Sie kann gegessen werden, weil sie essbar ist. " \
            "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
     doc = nlp(text)
-    vec = calculate_features(doc, nlp)
+
+    tokens_freq = get_data_from_json_file(TOKEN_FREQ)
+
+    disc_marker = get_data_from_json_file(DISCOURSE_MARKER)
+    discourse_markers_with_sense = get_data_from_json_file(DISCOURSE_MARKER_WITH_SENSE)
+    all_disc_marker_senses = get_data_from_json_file(ALL_DISCOURSE_MARKER)
+    discourse_marker = {
+        "disc_marker": disc_marker,
+        "discourse_markers_with_sense": discourse_markers_with_sense,
+        "all_disc_marker_senses": all_disc_marker_senses
+    }
+
+    vec = calculate_features(doc, nlp, tokens_freq, discourse_marker)
     feature_to_index = create_feature_to_idx_dict(FEATURES)
     header_features = list(feature_to_index.keys())
     print(header_features)
@@ -186,8 +210,18 @@ def cli(demo, directory_path, output_path):
         play_demo()
     else:
         #summaries_dir_path = "data/model_summaries/"
+        tokens_freq = get_data_from_json_file(TOKEN_FREQ)
+        disc_marker = get_data_from_json_file(DISCOURSE_MARKER)
+        discourse_markers_with_sense = get_data_from_json_file(DISCOURSE_MARKER_WITH_SENSE)
+        all_disc_marker_senses = get_data_from_json_file(ALL_DISCOURSE_MARKER)
+        discourse_marker = {
+            "disc_marker": disc_marker,
+            "discourse_markers_with_sense": discourse_markers_with_sense,
+            "all_disc_marker_senses": all_disc_marker_senses
+        }
+
         nlp = spacy.load("de_core_news_md")
-        text_complexity_features = extract_features_for_all_docs(directory_path, nlp)
+        text_complexity_features = extract_features_for_all_docs(directory_path, nlp, tokens_freq, discourse_marker)
 
         # create a feature to index dict to keep track of order of elements
         feature_to_index = create_feature_to_idx_dict(FEATURES)
