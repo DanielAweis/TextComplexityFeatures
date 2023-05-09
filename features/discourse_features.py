@@ -1,3 +1,11 @@
+# Calculate discourse (cohesion and coherence) features for the measurement
+# of text complexity.
+# Extracted features:
+# average count of pronouns per sentence
+# average count of definite articles per sentence
+# average count of discourse markers per sentence
+# Vector with counts of used discourse markers
+# You can run a demo with: $ python discourse_features.py
 import spacy
 from itertools import repeat
 
@@ -5,9 +13,9 @@ from utils_and_preprocess.utils import get_data_from_json_file, safe_division
 from utils_and_preprocess.constants import DISCOURSE_MARKER, \
     DISCOURSE_MARKER_WITH_SENSE, ALL_DISCOURSE_MARKER
 
-discourse_markers = get_data_from_json_file(DISCOURSE_MARKER)
-discourse_markers_with_sense = get_data_from_json_file(DISCOURSE_MARKER_WITH_SENSE)
-all_disc_marker_senses = get_data_from_json_file(ALL_DISCOURSE_MARKER)
+discourse_markers = get_data_from_json_file("../" + DISCOURSE_MARKER)
+discourse_markers_with_sense = get_data_from_json_file("../" + DISCOURSE_MARKER_WITH_SENSE)
+all_disc_marker_senses = get_data_from_json_file("../" + ALL_DISCOURSE_MARKER)
 
 
 # cohesion features
@@ -78,6 +86,7 @@ def demo():
         "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
     doc = nlp(text)
 
+    print(text)
     print("Average count per sentence...")
     print("... of pronouns:", get_average_count_of_pronouns_per_sentence(doc))
     print("... of definite articles:", get_average_count_of_definite_articles_per_sentence(doc))

@@ -1,8 +1,10 @@
 # Calculate surface features for the measurement of text complexity:
-# get_text_length_in_token
-# get_average_sentence_length_in_token
-# get_average_characters_per_word
-# get_average_syllables_per_word
+# Extracted features:
+# text length in token
+# average sentence length in token
+# average characters per word
+# average syllables per word
+# You can run a demo with: $ python surface_features.py
 import spacy
 import pyphen
 from utils_and_preprocess.utils import safe_division
@@ -14,52 +16,42 @@ def get_token(doc):
 
 
 def count_syllables(doc):
-    """
-    Computes the sum of all syllables per word, using the Pyphen moduls which is
+    """Computes the sum of all syllables per word, using the Pyphen moduls which is
     module to hyphenate text using existing Hunspell hyphenation dictionaries.
     See here https://github.com/Kozea/Pyphen
     :param doc: spacy.tokens.doc.Doc
-    :return: float
-    """
+    :return: float """
     dictionary = pyphen.Pyphen(lang="de_DE")
     return sum([len(dictionary.inserted(token.text).split("-")) for token in doc])
 
 
 def get_text_length_in_token(doc):
-    """
-    Computes the text lenght in token (words).
+    """Returns the text lenght in token (words).
     :param doc: spacy.tokens.doc.Doc
-    :return: int
-    """
+    :return: int """
     return get_token(doc)
 
 
 def get_average_sentence_length_in_token(doc):
-    """
-    Computes the average sentence lenght in token (words).
+    """Computes the average sentence lenght in token (words).
     :param doc: spacy.tokens.doc.Doc
-    :return: float
-    """
+    :return: float """
     return safe_division(get_token(doc), len(list(doc.sents)))
 
 
 def get_average_characters_per_word(doc):
-    """
-    Computes the average character per word.
+    """Computes the average character per word.
     :param doc: spacy.tokens.doc.Doc
-    :return: float
-    """
+    :return: float """
     char = sum([len(tok.text) for tok in doc if not tok.is_punct])
     return safe_division(char, get_token(doc))
 
 
 def get_average_syllables_per_word(doc):
-    """
-    Computes the average syllables per word, using the Pyphen module
+    """Computes the average syllables per word, using the Pyphen module
     in the function count_syllables.
     :param doc: spacy.tokens.doc.Doc
-    :return: float
-    """
+    :return: float """
     return safe_division(count_syllables(doc), get_token(doc))
 
 

@@ -1,9 +1,11 @@
-# Calculate syntactic features for the measurement of text complexity:
-# get_average_number_of_noun_phrases_per_sentence,
-# get_average_heights,
-# get_average_number_of_subordinate_clauses_per_sentence,
-# get_average_count_of_sentences_with_verb_as_root,
-# get_average_count_of_sentences_with_nouns_as_root
+# Calculate syntactic features for the measurement of text complexity.
+# Extracted features:
+# average number of noun phrases per sentence,
+# average syntactic tree heights,
+# average number of subordinate clauses per sentence,
+# average count of sentences with verb as root,
+# average count of sentences with nouns as root
+# You can run a demo with: $ python syntactic_features.py
 import spacy
 import statistics
 from utils_and_preprocess.utils import safe_division
@@ -40,8 +42,10 @@ def tree_height(root):
 def get_average_heights(doc):
     """Computes average height of parse trees for each sentence in doc.
     :param doc: spacy.tokens.doc.Doc
-    :return: float
-    "Das ist eine tolle Banane. " == tree_height = 3 """
+    Ex.:
+        text = "Das ist eine tolle Banane."
+        tree_height = 3
+    :return: float """
     roots = [sent.root for sent in doc.sents]
     tree_heights = [tree_height(root) for root in roots]
     return statistics.mean(tree_heights)
@@ -73,7 +77,7 @@ def demo():
         "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
 
     doc = nlp(text)
-
+    print(text)
     print("### Syntactic Features ###")
     print("Average number per sentences...")
     print("... of noun phrases:", get_average_number_of_noun_phrases_per_sentence(doc))
