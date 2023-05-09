@@ -43,6 +43,14 @@ def get_average_count_of_definite_articles_per_sentence(doc):
 
 # coherence feature
 def get_average_count_of_discourse_markers_per_sentence(doc):
+    """Calculates the average count of discourse markers per sentence.
+    Based on the discourse markers from the DimLex, a lexicon of german discourse
+    markers.
+    For more information see:
+    the comment in utils_and_preprocess.discourse_markers.py
+
+    :param doc: spacy.tokens.doc.Doc
+    :return: float """
     disc_markers = []
 
     for token in doc:
@@ -54,6 +62,13 @@ def get_average_count_of_discourse_markers_per_sentence(doc):
 
 
 def find_discourse_markers(doc):
+    """ Finds the discourse markers in the text based on the DimLex, a lexicon
+    of german discourse markers.
+    For more information see:
+    the comment in utils_and_preprocess.discourse_markers.py
+
+    :param doc: spacy.tokens.doc.Doc
+    :return: list of tuples """
     disc_markers = []
 
     for token in doc:
@@ -65,6 +80,11 @@ def find_discourse_markers(doc):
 
 
 def get_count_for_discourse_marker_senses(doc):
+    """Calculates the counts of the discourse markers in the texts and returns
+    a list of the counts.
+
+    :param doc: spacy.tokens.doc.Doc
+    :return: list of ints """
     dm_from_doc = find_discourse_markers(doc)
     # init empty vec
     counts_vec = list(repeat(0, len(all_disc_marker_senses)))
