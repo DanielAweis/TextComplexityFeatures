@@ -1,6 +1,7 @@
 # Functions to get the proportion of POS tags per text.
 # POS tag counts are normalized by dividing them by the number of tokens per text.
 # Number of tokens is defined without punctuations.
+# You can run a demo with: $ python proportion_of_POS_tags_features.py
 import spacy
 from utils_and_preprocess.utils import safe_division
 
@@ -107,6 +108,8 @@ def demo():
             "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
 
     doc = nlp(text)
+
+    print(text)
 
     print("Proportion of ...")
     print("... verbs:", get_POS_tag_proportion_for_verbs(doc))

@@ -1,6 +1,13 @@
+# Calculates semantic similarity features for the measurement of text complexity.
+# Extracted features:
+# average semantic similarity of all nouns
+# average semantic similarity of all verbs
+# average semantic similarity of all adjectives
+# You can run a demo with: $ python semantic_similarity_features.py
 import spacy
 import itertools
 from utils_and_preprocess.utils import safe_division
+
 
 def get_all_lemmatized_nouns(doc):
     """Returns all lemmatized nouns of th text in a list.
@@ -52,18 +59,30 @@ def calculate_average_semantic_similarity(list_of_strings, nlp):
 
 
 def get_average_semantic_similarity_of_all_nouns(doc, nlp):
+    """Calculates the average semantic similarity of all nouns in the text.
+    :param doc: spacy.tokens.doc.Doc
+    :param nlp: spacy model
+    :return: float """
     all_nouns = get_all_lemmatized_nouns(doc)
     combinations = create_combinations_of_elements(all_nouns)
     return calculate_average_semantic_similarity(combinations, nlp)
 
 
 def get_average_semantic_similarity_of_all_verbs(doc, nlp):
+    """Calculates the average semantic similarity of all verbs in the text.
+    :param doc: spacy.tokens.doc.Doc
+    :param nlp: spacy model
+    :return: float """
     all_verbs = get_all_lemmatized_verbs(doc)
     combinations = create_combinations_of_elements(all_verbs)
     return calculate_average_semantic_similarity(combinations, nlp)
 
 
 def get_average_semantic_similarity_of_all_adjectives(doc, nlp):
+    """Calculates the average semantic similarity of all adjectives and adverbs.
+    :param doc: spacy.tokens.doc.Doc
+    :param nlp: spacy model
+    :return: float """
     all_adjectives = get_all_lemmatized_adjectives(doc)
     combinations = create_combinations_of_elements(all_adjectives)
     return calculate_average_semantic_similarity(combinations, nlp)
