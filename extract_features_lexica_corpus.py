@@ -1,5 +1,15 @@
+# The script extracts the text complexity features for the lexica-corpus, which
+# contains of text from three Wiki-based lexica in german language representing
+# three different levels of text complexity.
+# For more information on the lexica-corpus see:
+# https://github.com/fhewett/lexica-corpus
+# You can run the demo in the commandline:
+# $ python extract_features_lexica_corpus.py -d True
+# If you want to run the script with the complete lexica-corpus make sure that
+# you have the data stored like in the constants.py declared
 import csv
 import spacy
+import click
 
 from extract_features import calculate_features, create_feature_to_idx_dict
 
@@ -17,7 +27,7 @@ def get_features_for_lexica_corpus(list_of_dicts, nlp):
     return results
 
 
-def demo():
+def play_demo():
     json_miniklexi = get_data_from_json_file(DEMO_MINIKLEXI)
     json_klexikon = get_data_from_json_file(DEMO_KLEXIKON)
     json_wiki = get_data_from_json_file(DEMO_WIKI)
@@ -59,49 +69,58 @@ def demo():
             line.extend(vecs)
             writer.writerow(line)
 
+    print("Find the extracted demo results in demo_data/demo_result.csv")
 
-def main():
-    json_miniklexi = get_data_from_json_file(MINIKLEXI)
-    json_klexikon = get_data_from_json_file(KLEXIKON)
-    json_wiki = get_data_from_json_file(WIKI)
 
-    miniklexi = json_miniklexi["einfache"]  # label 0.0
-    klexikon = json_klexikon["klexikon"]  # label 0.5
-    wiki = json_wiki["wiki"]  # label 1.0
+@click.command()
+@click.option("-d", "demo", type=bool, default=True, help="If you want to see a small demo.")
+def cli(demo):
+    if demo:
+        play_demo()
+    else:
+        json_miniklexi = get_data_from_json_file(MINIKLEXI)
+        json_klexikon = get_data_from_json_file(KLEXIKON)
+        json_wiki = get_data_from_json_file(WIKI)
 
-    nlp = spacy.load("de_core_news_md")
-    result_miniklexi = get_features_for_lexica_corpus(miniklexi, nlp)
-    result_klexikon = get_features_for_lexica_corpus(klexikon, nlp)
-    result_wiki = get_features_for_lexica_corpus(wiki, nlp)
+        miniklexi = json_miniklexi["einfache"]  # label 0.0
+        klexikon = json_klexikon["klexikon"]  # label 0.5
+        wiki = json_wiki["wiki"]  # label 1.0
 
-    # create a feature to index dict to keep track of order of elements
-    feature_to_index = create_feature_to_idx_dict(FEATURES)
+        nlp = spacy.load("de_core_news_md")
+        result_miniklexi = get_features_for_lexica_corpus(miniklexi, nlp)
+        result_klexikon = get_features_for_lexica_corpus(klexikon, nlp)
+        result_wiki = get_features_for_lexica_corpus(wiki, nlp)
 
-    # save results in one csv file
-    header = ["#id", "#label"]
-    header_features = list(feature_to_index.keys())
-    header.extend(header_features)
+        # create a feature to index dict to keep track of order of elements
+        feature_to_index = create_feature_to_idx_dict(FEATURES)
 
-    with open("lexica_corpus_text_complexity.csv", "w", encoding="utf-8") as csv_ofile:
-        writer = csv.writer(csv_ofile, delimiter=',')
-        writer.writerow(i for i in header)
-        for key, value in sorted(result_miniklexi.items()):
-            line = [f"miniklexi_{key}", 0.0]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
-        for key, value in sorted(result_klexikon.items()):
-            line = [f"klexikon_{key}", 0.5]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
-        for key, value in sorted(result_wiki.items()):
-            line = [f"wiki_{key}", 1.0]
-            vecs = [round(i, 6) for i in value]
-            line.extend(vecs)
-            writer.writerow(line)
+        # save results in one csv file
+        header = ["#id", "#label"]
+        header_features = list(feature_to_index.keys())
+        header.extend(header_features)
+
+        with open("lexica_corpus_text_complexity.csv", "w", encoding="utf-8") as csv_ofile:
+            writer = csv.writer(csv_ofile, delimiter=',')
+            writer.writerow(i for i in header)
+            for key, value in sorted(result_miniklexi.items()):
+                line = [f"miniklexi_{key}", 0.0]
+                vecs = [round(i, 6) for i in value]
+                line.extend(vecs)
+                writer.writerow(line)
+            for key, value in sorted(result_klexikon.items()):
+                line = [f"klexikon_{key}", 0.5]
+                vecs = [round(i, 6) for i in value]
+                line.extend(vecs)
+                writer.writerow(line)
+            for key, value in sorted(result_wiki.items()):
+                line = [f"wiki_{key}", 1.0]
+                vecs = [round(i, 6) for i in value]
+                line.extend(vecs)
+                writer.writerow(line)
+
+        print("Find the extracted demo results in lexica_corpus_text_complexity.csv")
 
 
 if __name__ == "__main__":
-    demo()
-    # main()
+    cli()
+
