@@ -1,4 +1,4 @@
-# This script generates json files (discourse_markers.json) with e.g. a list of all
+# This script generates json files in generated_tables/ with e.g. a list of all
 # discourse markers (str) from the DimLex, a lexicon of german discourse markers.
 # https://github.com/discourse-lab/dimlex/blob/master/DimLex-documentation.md
 
@@ -66,20 +66,20 @@ def get_rel_senses_with_discourse_marker(discourse_markers):
 
 
 def main():
-    dimlex_file_path = "data/discourse-lab/dimlex/DimLex.xml"
+    dimlex_file_path = "generated_tables/discourse-lab/dimlex/DimLex.xml"
     xml_data = read_DimLex_xml_file(dimlex_file_path)
 
     all_relation_senses = get_all_relation_senses(xml_data)
-    save_to_json_file(all_relation_senses, "all_discourse_marker_senses.json")
+    save_to_json_file(all_relation_senses, "generated_tables/all_discourse_marker_senses.json")
 
     discourse_markers = get_discours_markers(xml_data)
-    save_to_json_file(discourse_markers, "discourse_markers.json")
+    save_to_json_file(discourse_markers, "generated_tables/discourse_markers.json")
 
     discourse_markers_with_sense = get_discourse_markers_with_sense(xml_data)
-    save_to_json_file(discourse_markers_with_sense, "discourse_markers_with_sense.json")
+    save_to_json_file(discourse_markers_with_sense, "generated_tables/discourse_markers_with_sense.json")
 
     rel_senses_with_discourse_marker = get_rel_senses_with_discourse_marker(discourse_markers_with_sense)
-    save_to_json_file(rel_senses_with_discourse_marker, "rel_senses_with_discourse_marker.json")
+    save_to_json_file(rel_senses_with_discourse_marker, "generated_tables/rel_senses_with_discourse_marker.json")
 
 
 if __name__ == "__main__":

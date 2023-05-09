@@ -9,6 +9,7 @@ import numpy as np
 from utils_and_preprocess.utils import get_data_from_json_file, safe_division
 from utils_and_preprocess.constants import TOKEN_FREQ
 # based on the DeReWo corpus
+# https://www.ids-mannheim.de/digspra/kl/projekte/methoden/derewo/
 tokens_freq = get_data_from_json_file("../"+TOKEN_FREQ)
 
 
