@@ -192,8 +192,12 @@ def play_demo():
     vec = calculate_features(doc, nlp, tokens_freq, discourse_marker)
     feature_to_index = create_feature_to_idx_dict(FEATURES)
     header_features = list(feature_to_index.keys())
+    print("#### DEMO TEXT COMPLEXITY FEATURE EXTRACTION #####")
+    print(text)
+    print("EXTRACTED FEATURES:")
     print(header_features)
     print(vec)
+    print("#### END ####")
 
 
 @click.command()
@@ -209,6 +213,7 @@ def cli(demo, directory_path, output_path):
     if demo:
         play_demo()
     else:
+        print("#### TEXT COMPLEXITY FEATURE EXTRACTION #####")
         #summaries_dir_path = "data/model_summaries/"
         tokens_freq = get_data_from_json_file(TOKEN_FREQ)
         disc_marker = get_data_from_json_file(DISCOURSE_MARKER)
@@ -239,6 +244,9 @@ def cli(demo, directory_path, output_path):
                 vecs = [round(i, 6) for i in value]
                 line.extend(vecs)
                 writer.writerow(line)
+
+    print("Find the extracted features in ", output_path)
+    print("#### END ####")
 
 
 if __name__ == "__main__":

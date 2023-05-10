@@ -99,7 +99,7 @@ def cli(demo):
         header_features = list(feature_to_index.keys())
         header.extend(header_features)
 
-        with open("lexica_corpus_text_complexity.csv", "w", encoding="utf-8") as csv_ofile:
+        with open("text_complexity_lexica_corpus.csv", "w", encoding="utf-8") as csv_ofile:
             writer = csv.writer(csv_ofile, delimiter=',')
             writer.writerow(i for i in header)
             for key, value in sorted(result_miniklexi.items()):
@@ -118,7 +118,7 @@ def cli(demo):
                 line.extend(vecs)
                 writer.writerow(line)
 
-        print("Find the extracted demo results in lexica_corpus_text_complexity.csv")
+        print("Find the extracted features in text_complexity_lexica_corpus.csv")
 
 
 if __name__ == "__main__":
