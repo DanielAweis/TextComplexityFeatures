@@ -6,11 +6,8 @@
 import spacy
 import numpy as np
 
-from utils_and_preprocess.utils import get_data_from_json_file, safe_division
-from utils_and_preprocess.constants import TOKEN_FREQ
-# based on the DeReWo corpus
-# https://www.ids-mannheim.de/digspra/kl/projekte/methoden/derewo/
-tokens_freq = get_data_from_json_file("../"+TOKEN_FREQ)
+from constants import TOKEN_FREQ
+from utils_and_preprocess.utils import safe_division, get_data_from_json_file
 
 
 def calculate_ttr(doc):
@@ -35,7 +32,7 @@ def calculate_ttr(doc):
     return safe_division(len(unique_words), len(lemmatized_words))
 
 
-def calculate_lexical_complexity_score(doc):
+def calculate_lexical_complexity_score(doc, tokens_freq):
     """Computes the lexical complexity with lemmatized lowered words as
     proposed from Alva-Manchego et al. (2019):
         ### "The lexical complexity score of a simplified sentence is
@@ -87,8 +84,9 @@ def demo():
     doc = nlp(text)
     print(text)
     ttr = calculate_ttr(doc)
+    token_freq = get_data_from_json_file("../" + TOKEN_FREQ)
     print("Type-Token-Ratio:", ttr)
-    print("Lexical-Complexity-Score:", calculate_lexical_complexity_score(doc))
+    print("Lexical-Complexity-Score:", calculate_lexical_complexity_score(doc, token_freq))
 
 
 if __name__ == "__main__":

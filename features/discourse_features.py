@@ -10,12 +10,8 @@ import spacy
 from itertools import repeat
 
 from utils_and_preprocess.utils import get_data_from_json_file, safe_division
-from utils_and_preprocess.constants import DISCOURSE_MARKER, \
+from constants import DISCOURSE_MARKER, \
     DISCOURSE_MARKER_WITH_SENSE, ALL_DISCOURSE_MARKER
-
-discourse_markers = get_data_from_json_file("../" + DISCOURSE_MARKER)
-discourse_markers_with_sense = get_data_from_json_file("../" + DISCOURSE_MARKER_WITH_SENSE)
-all_disc_marker_senses = get_data_from_json_file("../" + ALL_DISCOURSE_MARKER)
 
 
 # cohesion features
@@ -42,7 +38,7 @@ def get_average_count_of_definite_articles_per_sentence(doc):
 
 
 # coherence feature
-def get_average_count_of_discourse_markers_per_sentence(doc):
+def get_average_count_of_discourse_markers_per_sentence(doc, discourse_markers):
     """Calculates the average count of discourse markers per sentence.
     Based on the discourse markers from the DimLex, a lexicon of german discourse
     markers.
@@ -50,6 +46,7 @@ def get_average_count_of_discourse_markers_per_sentence(doc):
     the comment in utils_and_preprocess.discourse_markers.py
 
     :param doc: spacy.tokens.doc.Doc
+    :param discourse_markers: list of discourse markers
     :return: float """
     disc_markers = []
 
@@ -61,13 +58,14 @@ def get_average_count_of_discourse_markers_per_sentence(doc):
     return safe_division(len(disc_markers), len(list(doc.sents)))
 
 
-def find_discourse_markers(doc):
+def find_discourse_markers(doc, discourse_markers_with_sense):
     """ Finds the discourse markers in the text based on the DimLex, a lexicon
     of german discourse markers.
     For more information see:
     the comment in utils_and_preprocess.discourse_markers.py
 
     :param doc: spacy.tokens.doc.Doc
+    :param discourse_markers_with_sense: list of lists
     :return: list of tuples """
     disc_markers = []
 
@@ -79,13 +77,15 @@ def find_discourse_markers(doc):
     return disc_markers
 
 
-def get_count_for_discourse_marker_senses(doc):
+def get_count_for_discourse_marker_senses(doc, all_disc_marker_senses, discourse_markers_with_sense):
     """Calculates the counts of the discourse markers in the texts and returns
     a list of the counts.
 
     :param doc: spacy.tokens.doc.Doc
+    :param all_disc_marker_senses: list of strings
+    :param discourse_markers_with_sense: list of lists
     :return: list of ints """
-    dm_from_doc = find_discourse_markers(doc)
+    dm_from_doc = find_discourse_markers(doc, discourse_markers_with_sense)
     # init empty vec
     counts_vec = list(repeat(0, len(all_disc_marker_senses)))
     for i in range(len(counts_vec)):
@@ -106,13 +106,17 @@ def demo():
         "Gurken und Bananen machen mich glücklich, obwohl sie aus Fasern bestehen. "
     doc = nlp(text)
 
+    discourse_markers = get_data_from_json_file("../" + DISCOURSE_MARKER)
+    discourse_markers_with_sense = get_data_from_json_file("../" + DISCOURSE_MARKER_WITH_SENSE)
+    all_disc_marker_senses = get_data_from_json_file("../" + ALL_DISCOURSE_MARKER)
+
     print(text)
     print("Average count per sentence...")
     print("... of pronouns:", get_average_count_of_pronouns_per_sentence(doc))
     print("... of definite articles:", get_average_count_of_definite_articles_per_sentence(doc))
-    print("... of discourse markers:", get_average_count_of_discourse_markers_per_sentence(doc))
+    print("... of discourse markers:", get_average_count_of_discourse_markers_per_sentence(doc, discourse_markers))
     print("Vector with counts of used discourse markers in doc:")
-    print(get_count_for_discourse_marker_senses(doc))
+    print(get_count_for_discourse_marker_senses(doc, all_disc_marker_senses, discourse_markers_with_sense))
 
     # output
     # Average count per sentence...
