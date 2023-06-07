@@ -20,8 +20,13 @@ data: a text-level approach with discourse features)
 
 
 # What do you need to run the code?
+You need Python version 3.8. It's recommended to install the required Python packages in a virtualenv. 
+You should move to the project directory if you have not already done so, create the environment with PYTHON_PATH -m venv env, and activate it with . env/bin/activate. 
+Then you can continue with the installation of the required python libraries:
 * To get the requirements run:  `$ pip3 install -r requirements.txt` 
 * NOTE: The requirements are only for the python files not for the jupyter notebooks in in data_analysis.
+After installing the requirements, you also need to download the spacy model for German:
+`python -m spacy download de_core_news_sm`
 
 # How to extract the text complexity features?
 * Extract the text complexity features: `$ python extract_features.py  -p "dir_to_data/" -o "output_file_name"`
