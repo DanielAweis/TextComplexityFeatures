@@ -245,8 +245,8 @@ def cli(demo, directory_path, output_path):
                 line.extend(vecs)
                 writer.writerow(line)
 
-    print("Find the extracted features in ", output_path)
-    print("#### END ####")
+        print("Find the extracted features in ", output_path)
+        print("#### END ####")
 
 
 if __name__ == "__main__":
