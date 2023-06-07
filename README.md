@@ -27,7 +27,7 @@ Then you can continue with the installation of the required python libraries:
 * NOTE: The requirements are only for the python files not for the jupyter notebooks in in data_analysis.
 
 After installing the requirements, you also need to download the spacy model for German:
-`python -m spacy download de_core_news_sm`
+`python -m spacy download de_core_news_md`
 
 # How to extract the text complexity features?
 * Extract the text complexity features: `$ python extract_features.py  -p "dir_to_data/" -o "output_file_name"`
