@@ -25,6 +25,7 @@ You should move to the project directory if you have not already done so, create
 Then you can continue with the installation of the required python libraries:
 * To get the requirements run:  `$ pip3 install -r requirements.txt` 
 * NOTE: The requirements are only for the python files not for the jupyter notebooks in in data_analysis.
+
 After installing the requirements, you also need to download the spacy model for German:
 `python -m spacy download de_core_news_sm`
 
