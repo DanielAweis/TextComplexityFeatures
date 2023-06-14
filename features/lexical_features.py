@@ -82,7 +82,6 @@ def demo():
     text = "Die Bananen sind reif. Ich esse gerne eine Banane, weil sie so schön " \
            "gelb ist. Manchmal esse ich auch Gurken, obwohl sie nicht gelb sind."
     doc = nlp(text)
-    print(text)
     ttr = calculate_ttr(doc)
     token_freq = get_data_from_json_file("../" + TOKEN_FREQ)
     print("Type-Token-Ratio:", ttr)
